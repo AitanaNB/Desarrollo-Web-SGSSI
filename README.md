@@ -2,6 +2,12 @@
 # Desarrollo-Web-SGSSI
 Grupo: Sudo Three-Way Handshake
 
+# Integarntes
+Antia Arean Rodríguez
+Pablo Fernández González
+Jannatul Ferdous Hossain Begum
+Ziyan Jiang
+Aitana Niño Bedoya
 
 ## Instrucciones de uso
  ### 1.Descargar el repositorio
