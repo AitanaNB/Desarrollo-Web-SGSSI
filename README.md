@@ -1,19 +1,22 @@
 
-# Docker LAMP
-Linux + Apache + MariaDB (MySQL) + PHP 7.2 on Docker Compose. Mod_rewrite enabled by default.
+# Desarrollo-Web-SGSSI
+Grupo: Sudo Three-Way Handshake
 
-## Instructions
 
-Enter the following command to start your containers:
+## Instrucciones de uso
+ ### 1.Descargar el repositorio
+ ```bash
+ git clone https://github.com/AitanaNB/Desarrollo-Web-SGSSI.git
+ ```
+### 2.Activar el servicio Docker en la carpeta
+```bash
+$ cd Desarrollo-Web-SGSSI
+```
 ```bash
 $ docker-compose up -d
 ```
 
-To stop them, use this:
+### Para parar Docker
 ```bash
 $ docker-compose stop
 ```
-
-Feel free to make pull requests and help to improve this.
-
-If you are looking for phpMyAdmin, take a look at [this](https://github.com/celsocelante/docker-lamp/issues/2).
