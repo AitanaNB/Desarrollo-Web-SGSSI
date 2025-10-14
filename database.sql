@@ -6,6 +6,7 @@
 -- Tiempo de generación: 16-09-2020 a las 16:37:17
 -- Versión del servidor: 10.5.5-MariaDB-1:10.5.5+maria~focal
 -- Versión de PHP: 7.4.9
+--USE `database`;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,7 +35,7 @@ CREATE TABLE `usuarios` (
   `telefono` int(9) NOT NULL,
   `fecha_nacimiento` date NOT NULL,
   `email` text NOT NULL,
-  `dinero` decimal(10,2) NOT NULL, 
+  `dinero` decimal(10,2) NOT NULL DEFAULT 0, 
   `username` text NOT NULL,
   `password` varchar(100) NOT NULL,
   `es_admin` tinyint(1) DEFAULT 0
