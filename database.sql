@@ -60,6 +60,7 @@ CREATE TABLE `coches` (
   `color` varchar(10) NOT NULL,
   `kilometraje` int(10) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
+  `en_venta` tinyint(1) NOT NULL DEFAULT 0,
   `id_propietario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
