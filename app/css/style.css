@@ -10,6 +10,7 @@ header {
     background-color: #007bff;
     color: white;
     padding: 30px 0;
+    position: relative; /* permite posicionar el botón dentro */
 }
 
 h1 {
@@ -28,6 +29,28 @@ p {
 img {
     margin-top: 20px;
     border-radius: 8px;
+}
+
+.boton_Superior {
+    display: flex;             /* alinea texto e imagen */
+    align-items: center;              /* centra verticalmente */
+    justify-content: center;
+    padding: 8px 16px;
+    background-color: #ffffff;        /* azul más oscuro */
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 6px;
+
+    position: absolute;               /* posición dentro del header */
+    right: 15px;                      /* <-- mueve el botón a la derecha */    
+}
+.boton_Superior img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    transform: translateY(-30%);
 }
 
 .boton {
@@ -64,7 +87,7 @@ th {
 }
 
 footer {
-    margin-top: 50px;
+    margin-top: 100px;
     padding: 20px;
     font-size: 14px;
     background-color: #f4f4f4;
@@ -73,3 +96,14 @@ footer {
 #contenido {
     margin-top: 20px;
 }
+
+/* Alinea los botones a la izquierda */
+#botones {
+    text-align: left;       /* Alinea los enlaces dentro a la izquierda */
+    margin-left: 40px;      /* Separa un poco del borde */
+}
+
+#botones .boton {
+    display: inline-block;  /* Asegura que queden uno al lado del otro */
+}
+
