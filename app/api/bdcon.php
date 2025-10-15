@@ -1,14 +1,13 @@
 <?php
-$servername = "db"; // Cambia esto al nombre de tu servidor si es diferente
-$username = "admin"; // Cambia esto a tu nombre de usuario de la base de datos
-$password = "test"; // Cambia esto a tu contraseña de la base de datos
-$database = "database"; // Cambia esto al nombre de tu base de datos
+  // Configuración de la base de datos
+  // phpinfo();
+  $hostname = "db";
+  $username = "admin";
+  $password = "test";
+  $db = "database";
 
-// Crear una conexión
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Verificar la conexión
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
+  $conn = mysqli_connect($hostname,$username,$password,$db);
+  if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
+  }
 ?>
