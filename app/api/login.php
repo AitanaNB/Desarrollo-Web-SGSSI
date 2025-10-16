@@ -1,26 +1,46 @@
 <?php
-// Conexión a la base de datos
-include 'bdcon.php'; // Este archivo debe definir: $conn
+session_start();
+
+// Conexion a la base de datos
+include 'bdcon.php';
+
+if (!$conn) {
+    die("Conexión fallida: " . mysqli_connect_error());
+}
 
 // Recibir datos del formulario
 $usuario = $_POST['usuario'];
 $password = $_POST['password'];
 
-$sql = "SELECT * FROM usuarios WHERE username = '$usuario' AND password = '$password'";
-$result = mysqli_query($conn, $sql);
+// Usar consultas preparadas para evitar SQL injection
+$sql = "SELECT * FROM usuarios WHERE username = ?";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "s", $usuario);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 if (mysqli_num_rows($result) === 1) {
-     // Login correcto
     $row = mysqli_fetch_assoc($result);
-
-    // Guardar datos de sesion
-    $_SESSION['usuario'] = $usuario;
-    // sin echo, da error
-    //echo "Inicio de sesión exitoso. Bienvenido, $usuario.";
-
-    //Redirigir a pag principal
-    header("Location: inicio.php");
+    
+    // Verificar contraseña
+    if ($password === $row['password']) {
+        // Login correcto - Guardar datos en sesión
+        $_SESSION['user_id'] = $row['id'];
+        $_SESSION['usuario'] = $row['username'];
+        $_SESSION['nombre'] = $row['nombre'];
+        $_SESSION['es_admin'] = $row['es_admin'];
+        
+        // Redirigir a pagina principal
+        header("Location: inicio.php");
+        exit();
+    } else {
+        // Contraseña incorrecta
+        echo "Usuario o contraseña incorrectos.";
+    }
 } else {
+    // Usuario no encontrado
     echo "Usuario o contraseña incorrectos.";
 }
+
+mysqli_close($conn);
 ?>
