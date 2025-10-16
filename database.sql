@@ -45,7 +45,7 @@ CREATE TABLE `usuarios` (
 --
 INSERT INTO `usuarios` (`id`, `nombre`, `apellidos`, `dni`, `telefono`, `fecha_nacimiento`, `email`, `dinero`, `username`, `password`, `es_admin`) VALUES
 (1, 'Admin', 'Sistema', '00000000-T', '600000000', '1990-01-01', 'admin@sistema.com', 50000.00, 'admin', 'admintest', 1),
-(2, 'Aitor', 'Perez Garcia', '12345678-Z', '612345678', '1995-11-23', 'juan@example.com', 15000.00, 'juan', 'qwerty', 0);
+(2, 'Juan', 'Perez Garcia', '12345678-Z', '612345678', '1995-11-23', 'juan@example.com', 15000.00, 'juan', 'qwerty', 0);
 
 
 --
