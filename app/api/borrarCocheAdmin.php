@@ -3,13 +3,13 @@ session_start();
 
 // Verificar que el usuario esté logueado y sea admin
 if (!isset($_SESSION['usuario'])) {
-    echo "⛔ Debes iniciar sesión para acceder a esta página.";
+    echo "Debes iniciar sesión para acceder a esta página.";
     exit();
 }
 
 // Solo permitir si es admin
 if ($_SESSION['es_admin'] != 1) {
-    echo "⛔ Acceso denegado. Solo el administrador puede ver esta página.";
+    echo "Acceso denegado. Solo el administrador puede ver esta página.";
     exit();
 }
 

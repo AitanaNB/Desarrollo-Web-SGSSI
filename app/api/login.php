@@ -42,5 +42,5 @@ if (mysqli_num_rows($result) === 1) {
     echo "Usuario o contraseña incorrectos.";
 }
 
-mysqli_close($conn);
+//mysqli_close($conn);
 ?>

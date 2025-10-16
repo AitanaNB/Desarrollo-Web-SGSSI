@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+// Verificar si el usuario está logueado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Conexión a la base de datos
+include 'bdcon.php';
+
+if (!$conn) {
+    die("<div class='alert alert-error'>Conexión fallida: " . mysqli_connect_error() . "</div>");
+}
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -10,13 +26,13 @@
 <body>
     
      <header>
-         <!-- Botón arriba a la izquierda -->
-         <a href="cuenta.html" class="boton_Superior">  
+         <!-- Botón arriba a la derecha -->
+         <a href="show_user.php" class="boton_Superior">  
         <img src="/media/a.png">
         </a>
         
         <h1>FORO COMPRAMOS TU COCHE</h1>
-        <p>Bienvenido a tu portal automotriz</p>       
+        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p>       
     </header>
     <nav>
         <div class="contenido">
@@ -24,10 +40,10 @@
                 <p>Explora el catálogo, revisa tus vehículos o accede a tu cuenta.</p>
 
                 <div id="botones">
-                    <a href="catalogo.html" class="boton">Catálogo de coches</a>
+                    <a href="ver_catalogoAdmin.php" class="boton">Catálogo de coches</a>
                     <br>
 
-                    <a href="mis-coches.html" class="boton">Ver mis coches</a>
+                    <a href="mis_coches.php" class="boton">Ver mis coches</a>
                 </div>
     </nav>
     

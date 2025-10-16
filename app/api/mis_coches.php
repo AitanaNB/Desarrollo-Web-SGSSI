@@ -32,7 +32,7 @@ if (!$conn) {
         <div class="header-container">
             <div>
                 <h1>Mis Coches</h1>
-                <p>Gestiona tus vehículos en venta - Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></p>
+                <p>Gestiona tus vehículos en venta - Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p>
             </div>
             <div>
                 <a href="subir_coche.php" class="btn-subir">Subir coche</a>
@@ -41,10 +41,10 @@ if (!$conn) {
     </header>
 
     <nav>
-        <a href="../index.php">Inicio</a> |
+        <a href="inicio.php">Inicio</a> |
         <a href="catalogo.php">Catálogo</a> |
         <a href="vender_coche.php">Vender Coche</a> |
-        <a href="logout.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
+        <a href="../index.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
     </nav>
 
     <main>
