@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <header>
         <h1>Modificar Coche</h1>
-        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p> |
+        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p>
         <p> Actualiza la información de tu coche a continuación:</p>
     </header>
     <nav>

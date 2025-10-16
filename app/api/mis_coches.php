@@ -23,7 +23,10 @@ if (!$conn) {
     <link rel="stylesheet" href="/css/style.css">
     <script>
         function confirmarEliminacion(id, matricula) {
-            return confirm('¿Estás seguro de que quieres eliminar el coche con matrícula ' + matricula + '? Esta acción no se puede deshacer.');
+            if (confirm('¿Estás seguro de que quieres eliminar el coche con matrícula ' + matricula + '? Esta acción no se puede deshacer.')) {
+                form.submit()
+            }
+            return false;
         }
     </script>
 </head>
@@ -68,7 +71,6 @@ if (!$conn) {
         // Verificar si hay error en la consulta
         if ($result === false) {
             echo "<div class='alert alert-error'>Error en la consulta: " . mysqli_error($conn) . "</div>";
-            echo "<div class='alert alert-warning'>Consulta SQL: " . htmlspecialchars($sql) . "</div>";
         }
         // Verificar si la consulta fue exitosa y tiene resultados
         else if (mysqli_num_rows($result) > 0) {
@@ -99,11 +101,11 @@ if (!$conn) {
                         <td>" . $estado_venta . "</td>
                         <td class='acciones'>
                             <a href='modificar_coche.php?id=" . $row["id"] . "' class='btn-modificar'>Modificar</a>
-                            <a href='eliminar_coche.php?id=" . $row["id"] . "' 
-                               class='btn-eliminar' 
-                               onclick='return confirmarEliminacion(" . $row["id"] . ", \"" . $row["matricula"] . "\")'>
-                               Eliminar
-                            </a>
+                            <!-- Formulario para eliminar coche -->
+                            <form method='POST' action='eliminar_coche.php' style='display:inline;' onsubmit='return confirmarEliminacion(" . $row["id"] . ", \"" . htmlspecialchars($row["matricula"]) . "\");'>
+                                <input type='hidden' name='id_coche' value='" . $row["id"] . "'>
+                                <button type='submit' class='btn-eliminar'>Eliminar</button>
+                            </form>
                         </td>
                       </tr>";
             }
