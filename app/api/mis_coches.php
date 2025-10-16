@@ -3,7 +3,7 @@ session_start();
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -43,8 +43,7 @@ if (!$conn) {
     <nav>
         <a href="inicio.php">Inicio</a> |
         <a href="catalogo.php">Catálogo</a> |
-        <a href="vender_coche.php">Vender Coche</a> |
-        <a href="../index.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
+        <a href="logout.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
     </nav>
 
     <main>
@@ -115,7 +114,7 @@ if (!$conn) {
                     <h3>No tienes coches registrados</h3>
                     <p>¡Comienza a vender tu primer coche!</p>
                     <a href='subir_coche.php' class='btn-subir' style='margin-top: 15px;'>
-                        ➕ Subir mi primer coche
+                        Subir mi primer coche
                     </a>
                   </div>";
         }
