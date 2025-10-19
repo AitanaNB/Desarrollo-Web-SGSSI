@@ -1,32 +1,7 @@
 <?php
- // echo '<h1>COMPRAMOS TU COCHE <h1>';
- // echo "<h3>Te vamos a robar los datos</h3>";
-  session_start();
-
-  // phpinfo();
-  $hostname = "db";
-  $username = "admin";
-  $password = "test";
-  $db = "database";
-
-  $conn = mysqli_connect($hostname,$username,$password,$db);
-  if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
-  }
-
-
-//mostrar usuarios
-$query = mysqli_query($conn, "SELECT * FROM usuarios")
-   or die (mysqli_error($conn));
-echo "<tr> Esto es para pruebas:</tr>";
-while ($row = mysqli_fetch_array($query)) {
-    echo
-   "<tr>
-    <td>{$row['id']}</td>
-    <td>{$row['nombre']}</td>
-   </tr>";
-}
-   
+session_start();
+include './api/bdcon.php';
+ 
 
 ?>
 <!DOCTYPE html>
@@ -72,24 +47,49 @@ while ($row = mysqli_fetch_array($query)) {
                 `;
                 //listener
                 //document.getElement
-            } else if(tipo === 'registro'){
+            } else if(tipo === 'registro'){ //VALIDANDO FORMATO
                 div.innerHTML = `
                     <h3>Registrarse</h3>
-                    <form action="/api/signin.php" method="POST">
+                    <form action="/api/register.php" method="POST" onsubmit="return validarDni()">
                         Nombre: <br><input type="text" name="nombre" required><br>
                         Apellidos: <br><input type="text" name="apellidos" required><br>
-                        DNI: <br><input type="text" name="dni" maxlength="10" required><br>
-                        Tlf: <br><input type="text" name="telefono" required><br>
+                        DNI (formato 11111111-X): <br><input type="text" name="dni" id="dni" maxlength="10" pattern="^\\d{8}-[A-Z]$" required
+                        title="Debe tener 8 números, un guion y una letra mayúscula, como 12345678-Z"><br>
+                        Tlf: <br><input type="text" name="telefono" pattern="^\\d{9}$" required ><br>
                         Fecha nacimiento: <br><input type="date" name="fecha_nacimiento" required><br>
-                        Email: <br><input type="text" name="email" required><br>
+                        Email: <br><input type="email" name="email" required><br>
                         Username: <br><input type="text" name="username" required><br>
                         Contraseña: <br><input type="password" name="password" required><br><br>
                         <input type="submit" value="Registrarse">
                     </form>
                 `;
+                
             }
                     
         }
+    
+        function validarDni(){
+            const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+            const dniInput = document.getElementById("dni");
+            const dni = dniInput.value.toUpperCase().trim();
+
+            // Separar número y letra
+            const partes = dni.split("-");
+            const numero = parseInt(partes[0]);
+            const letra = partes[1];
+
+            // Calcular la letra correcta
+            const letraCorrecta = letras[numero % 23];
+
+            // Comparar
+            if (letra !== letraCorrecta) {
+                alert(`Letra de DNI incorrecta.`);
+                return false;
+            }
+
+            return true; // Todo correcto
+        }
+
     </script>
 
 <br>

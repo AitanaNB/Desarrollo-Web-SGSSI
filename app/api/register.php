@@ -12,11 +12,6 @@ $email = $_POST['email'];
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-// Validación simple
-if (empty($nombre) || empty($email) || empty($password)) {
-    die("Todos los campos son obligatorios.");
-}
-
 /// Insertar en la base de datos
 //$stmt = $conn->prepare("INSERT INTO usuarios (nombre, email) VALUES (?, ?)");
 //$stmt->bind_param("ss", $nombre, $email); version xa evitar injeccion?

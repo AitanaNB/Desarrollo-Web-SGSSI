@@ -69,7 +69,7 @@ mysqli_close($conn);
     </header>
     <nav>
         <a href="inicio.php">Inicio</a> |
-        <a href="../index.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
+        <a href="logout.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
     </nav>
     <main>    
         <h2>Tus datos personales</h2>
