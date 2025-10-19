@@ -27,24 +27,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_propietario = $_SESSION['user_id'];
 
     if (empty($matricula) || empty($modelo) || empty($marca) || empty($color) || empty($kilometraje) || empty($precio)) {
-        die("Todos los campos son obligatorios.");
-    }
-
-    $check_sql = "SELECT id FROM coches WHERE matricula = '$matricula'";
-    $check_result = $conn->query($check_sql);
-
-    if ($check_result->num_rows > 0) {
-        die("Error: Ya existe un coche con esa matrícula.");
+        $mensaje = "<div class='alert alert-error'>Todos los campos son obligatorios.</div>";
     } else {
-        $sql = "INSERT INTO coches (matricula, modelo, marca, color, kilometraje, precio, en_venta, id_propietario)
-                VALUES ('$matricula', '$modelo', '$marca', '$color', $kilometraje, $precio, $en_venta, $id_propietario)";
+        // verificar si la matrícula ya existe
+        $check_sql = "SELECT id FROM coches WHERE matricula = '$matricula'";
+        $check_result = $conn->query($check_sql);
 
-        if (mysqli_query($conn, $sql)) {
-            echo "Coche subido con éxito";
+        if ($check_result->num_rows > 0) {
+            $mensaje = "<div class='alert alert-error'>Error: Ya existe otro coche con esa matrícula.</div>";
         } else {
-            echo "Error: " . $conn->error;
+            $sql = "INSERT INTO coches (matricula, modelo, marca, color, kilometraje, precio, en_venta, id_propietario)
+                    VALUES ('$matricula', '$modelo', '$marca', '$color', $kilometraje, $precio, $en_venta, $id_propietario)";
+
+            if (mysqli_query($conn, $sql)) {
+                echo "Coche subido con éxito";
+            } else {
+                echo "Error: " . $conn->error;
+            }
         }
     }
+
+    
 }
 ?>
 
@@ -55,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="shortcut icon" href="media/icon.svg" />
+    <script src="../js/validarDatos.js"></script>
 </head>
 <body>
     <header>
@@ -75,11 +79,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <main>
         <div class="form-container">
-            <form method="POST" action="">
+            <?php
+            // Mostrar mensaje de error si existe
+            if (isset($mensaje) && !empty($mensaje)) {
+                echo $mensaje;
+            }
+            ?>
+            <form id="item_add_form" method="POST" onsubmit="return validarCoche()">
                 <table>
                     <tr>
                         <td><label for="matricula">Matrícula:</label></td>
-                        <td><input type="text" id="matricula" name="matricula" required></td>
+                        <td><input type="text" id="matricula" name="matricula" required placeholder="1234-ABC"></td>
                     </tr>
                     <tr>
                         <td><label for="modelo">Modelo:</label></td>
@@ -106,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <td><input type="checkbox" id="en_venta" name="en_venta"></td>
                     </tr>
                 </table>
-                <button type="submit" class="boton">Subir coche</button>
+                <button id="item_add_submit" type="submit" class="boton">Subir coche</button>
                 <a href="mis_coches.php" class="boton">Cancelar</a>
             </form>
         </div>

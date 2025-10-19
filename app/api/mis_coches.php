@@ -7,6 +7,10 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+$es_admin = ($_SESSION['es_admin'] == 1);
+$catalogo_destino = $es_admin ? 'ver_catalogoAdmin.php' : 'catalogo.php';
+$texto_catalogo = $es_admin ? 'Catálogo (Admin)' : 'Catálogo de coches';
+
 // Conexión a la base de datos
 include 'bdcon.php';
 
@@ -45,7 +49,7 @@ if (!$conn) {
 
     <nav>
         <a href="inicio.php">Inicio</a> |
-        <a href="catalogo.php">Catálogo</a> |
+        <a href="<?php echo $catalogo_destino; ?>"> <?php echo $texto_catalogo; ?> </a> |
         <a href="logout.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
     </nav>
 

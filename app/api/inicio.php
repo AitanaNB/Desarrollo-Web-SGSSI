@@ -7,6 +7,11 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Determinar a qué catalogo redirigir según el tipo de usuario
+$es_admin = ($_SESSION['es_admin'] == 1);
+$catalogo_destino = $es_admin ? 'ver_catalogoAdmin.php' : 'catalogo.php';
+$texto_catalogo = $es_admin ? 'Catálogo (Admin)' : 'Catálogo de coches';
+
 // Conexión a la base de datos
 include 'bdcon.php';
 
@@ -32,8 +37,11 @@ if (!$conn) {
         </a>
         
         <h1>FORO COMPRAMOS TU COCHE</h1>
-        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p>       
+        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?><?php echo $es_admin ? ' (Administrador)' : ''; ?></p>    
     </header>
+    <nav>
+        <a href="logout.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
+    </nav>
     <main>
         <nav>
         <div class="contenido">
@@ -41,7 +49,8 @@ if (!$conn) {
                 <p>Explora el catálogo, revisa tus vehículos o accede a tu cuenta.</p>
 
                 <div id="botones">
-                    <a href="ver_catalogoAdmin.php" class="boton">Catálogo de coches</a>
+                    <!-- Botón dinámico según el rol del usuario -->
+                    <a href="<?php echo $catalogo_destino; ?>" class="boton"><?php echo $texto_catalogo; ?></a>
                     <br>
 
                     <a href="mis_coches.php" class="boton">Ver mis coches</a>

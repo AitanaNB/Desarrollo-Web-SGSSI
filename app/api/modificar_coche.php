@@ -50,24 +50,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($matricula) || empty($modelo) || empty($marca) || empty($precio)) {
         die("<div class='alert alert-error'>Todos los campos obligatorios deben ser completados.</div>");
     } else {
-        // Actualizar en la base de datos
-        $sql = "UPDATE coches SET 
-                matricula = '$matricula',
-                modelo = '$modelo',
-                marca = '$marca',
-                color = '$color',
-                kilometraje = $kilometraje,
-                precio = $precio,
-                en_venta = $en_venta
-                WHERE id = $coche_id AND id_propietario = $user_id";
+        // Verificar si la matrícula ya existe en otro coche
+        $sql_check = "SELECT id FROM coches WHERE matricula = '$matricula' AND id != $coche_id";
+        $res_check = mysqli_query($conn, $sql_check);
+        if (mysqli_num_rows($res_check) > 0) {
+            $mensaje = "<div class='alert alert-error'>Error: Ya existe otro coche con esa matrícula.</div>";
+        } else {
+            // Actualizar en la base de datos
+            $sql = "UPDATE coches SET 
+                    matricula = '$matricula',
+                    modelo = '$modelo',
+                    marca = '$marca',
+                    color = '$color',
+                    kilometraje = $kilometraje,
+                    precio = $precio,
+                    en_venta = $en_venta
+                    WHERE id = $coche_id AND id_propietario = $user_id";
 
-        // Ejecutar la consulta
-        if (mysqli_query($conn, $sql)) {
-            header("Location: mis_coches.php?modificado=1"); // Redirige a mis_coches.php con un parámetro de éxito
-            exit();
-        } else { // Si falla, crea un mensaje de error
-            $mensaje = "<div class='alert alert-error'>Error al actualizar el coche: " . mysqli_error($conn) . "</div>";
+            // Ejecutar la consulta
+            if (mysqli_query($conn, $sql)) {
+                header("Location: mis_coches.php?id=$coche_id"); // Redirige a mis_coches.php con un parámetro de éxito
+                exit();
+            } else { // Si falla, crea un mensaje de error
+                $mensaje = "<div class='alert alert-error'>Error al actualizar el coche: " . mysqli_error($conn) . "</div>";
+            }
         }
+        
     }
 
 }
@@ -80,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="/css/style.css">
     <title>Modificar Coche</title>
     <link rel="shortcut icon" href="/media/icon.svg" />
+    <script src="../js/validarDatos.js"></script>
 </head>
 <body>
     <header>
@@ -102,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo $mensaje;
             }
             ?>
-            <form method="POST">
+            <form id="item_modify_form" method="POST" onsubmit="return validarCoche()">
                 <table>
                     <tr>
                         <td><label for="matricula">Matrícula:</label></td>
@@ -133,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <td><input type="checkbox" id="en_venta" name="en_venta" <?php if ($coche['en_venta']) echo 'checked'; ?>></td>
                     </tr>
                 </table>
-                <button type="submit" class="boton">Guardar cambios</button>
+                <button id="item_modify_submit" type="submit" class="boton">Guardar cambios</button>
                 <a href="mis_coches.php" class="boton">Cancelar</a>
             </form>
         </div>
