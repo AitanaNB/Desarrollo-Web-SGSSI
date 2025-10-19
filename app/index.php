@@ -11,23 +11,24 @@ include './api/bdcon.php';
     <title>COMPRAMOS TU COCHE</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="shortcut icon" href="media/icon.svg" />
+    <script src="js/validarDatos.js"></script> 
 </head>
 <body>
     <header>
         <h1>FORO COMPRAMOS TU COCHE</h1>
         <p>te vamos a robar los datos y el coche </p>
     </header>
+    <main>
+       <div class="contenido">
+            <img src="media/coche.jpg" width="300" height="200"/>
+            <br>
 
-    <div class="contenido">
-        <img src="media/coche.jpg" width="300" height="200"/>
-        <br>
-
-        <button class="boton" onclick="mostrar('login')">Iniciar sesión</button>
-        <button class="boton" onclick="mostrar('registro')">Registrarse</button>
-    </div>
-
-    <div id="contenido" style="margin-top:20px;"></div>
-
+            <button class="boton" onclick="mostrar('login')">Iniciar sesión</button>
+            <button class="boton" onclick="mostrar('registro')">Registrarse</button>
+            
+            <div id="contenido"></div> 
+        </div>
+    </main>
     <script>
       //para cargar contenido
         function mostrar(tipo) {
@@ -66,28 +67,6 @@ include './api/bdcon.php';
                 
             }
                     
-        }
-    
-        function validarDni(){
-            const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
-            const dniInput = document.getElementById("dni");
-            const dni = dniInput.value.toUpperCase().trim();
-
-            // Separar número y letra
-            const partes = dni.split("-");
-            const numero = parseInt(partes[0]);
-            const letra = partes[1];
-
-            // Calcular la letra correcta
-            const letraCorrecta = letras[numero % 23];
-
-            // Comparar
-            if (letra !== letraCorrecta) {
-                alert(`Letra de DNI incorrecta.`);
-                return false;
-            }
-
-            return true; // Todo correcto
         }
 
     </script>

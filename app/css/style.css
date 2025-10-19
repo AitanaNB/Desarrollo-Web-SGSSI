@@ -1,9 +1,19 @@
 body {
-    font-family: Arial, sans-serif;
+    /*font-family: Arial, sans-serif;*/
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     background-color: #eef1f4;
     margin: 0;
     padding: 0;
     text-align: center;
+    
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    
+}
+main {
+  flex: 1;
 }
 
 header {
@@ -92,10 +102,10 @@ th {
 }
 
 footer {
-    margin-top: 100px;
     padding: 20px;
     font-size: 14px;
     background-color: #f4f4f4;
+    
 }
 
 #contenido {

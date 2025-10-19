@@ -34,7 +34,8 @@ if (!$conn) {
         <h1>FORO COMPRAMOS TU COCHE</h1>
         <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p>       
     </header>
-    <nav>
+    <main>
+        <nav>
         <div class="contenido">
                 <h2>Tu portal de coches favorito</h2>
                 <p>Explora el catálogo, revisa tus vehículos o accede a tu cuenta.</p>
@@ -46,6 +47,8 @@ if (!$conn) {
                     <a href="mis_coches.php" class="boton">Ver mis coches</a>
                 </div>
     </nav>
+    </main>
+    
     
 <footer>
     <!--&copy; <?= date('Y') ?> <br>-->
@@ -53,3 +56,4 @@ if (!$conn) {
      
 </footer>
 </body>
+</html>

@@ -60,6 +60,7 @@ mysqli_close($conn);
     <title>COMPRAMOS TU COCHE</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="shortcut icon" href="/media/icon.svg" />
+    <script src="../js/validarDatos.js"></script> 
 </head>
 <body>
     <header>
@@ -73,7 +74,7 @@ mysqli_close($conn);
     </nav>
     <main>    
         <h2>Tus datos personales</h2>
-        <form method="POST">
+        <form method="POST" onsubmit="return validarDni()">
             <table>
                 <tr>
                         <th>Nombre:</th>
@@ -88,12 +89,14 @@ mysqli_close($conn);
                 <tr>
                     <th>DNI:</th>
                     <td><?= htmlspecialchars($usuario['dni']); ?></td>
-                    <td><input type="text" name="dni" value="<?= htmlspecialchars($usuario['dni']); ?>"></td>
+                    <td><input type="text" name="dni" 
+                    id="dni" maxlength="10" pattern="^\d{8}-[A-Z]$" value="<?= htmlspecialchars($usuario['dni']); ?>"></td>
                 </tr>
                 <tr>
                     <th>Teléfono:</th>
                     <td><?= htmlspecialchars($usuario['telefono']); ?></td>
-                    <td><input type="text" name="telefono" value="<?= htmlspecialchars($usuario['telefono']); ?>"></td>
+                    <td><input type="text" name="telefono" 
+                    pattern="^\d{9}$" maxlength="9" value="<?= htmlspecialchars($usuario['telefono']); ?>"></td>
                 </tr>
                 <tr>
                     <th>Fecha de nacimiento:</th>
@@ -126,3 +129,4 @@ mysqli_close($conn);
      
 </footer>
 </body>
+</html>
