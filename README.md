@@ -2,7 +2,7 @@
 # Desarrollo-Web-SGSSI
 Grupo: Sudo Three-Way Handshake
 
-# Integrantes
+## Integrantes
 Antia Arean Rodríguez
 
 Pablo Fernández González
@@ -25,7 +25,8 @@ $ cd Desarrollo-Web-SGSSI
 ```bash
 $ docker-compose up -d
 ```
-
+### 3. Importar la base de datos "database.sql" el phpMyAdmin (localhost:8890)
+### 4. Abrir la web en localhost:81
 ### Para parar Docker
 ```bash
 $ docker-compose stop
