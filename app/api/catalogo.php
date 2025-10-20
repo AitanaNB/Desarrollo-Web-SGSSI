@@ -1,4 +1,5 @@
 <?php
+
 //esto no se que hace
 session_start();
 
