@@ -7,10 +7,13 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Determinar a qué catalogo redirigir según el tipo de usuario
+// Determinar a qué catalogo redirigir según el tipo de usuario (si es admin mostrará una cosa, si no, la otra)
 $es_admin = ($_SESSION['es_admin'] == 1);
-$catalogo_destino = $es_admin ? 'ver_catalogoAdmin.php' : 'catalogo.php';
-$texto_catalogo = $es_admin ? 'Catálogo (Admin)' : 'Catálogo de coches';
+$catalogo_destino = $es_admin ? 'catalogoCocheAdmin.php' : 'catalogo.php';
+$texto_catalogo = $es_admin ? 'Catálogo Coches' : 'Catálogo de coches';
+$cuentas_destino = $es_admin ? 'catalogoCuentaAdmin.php' : 'mis_coches.php';
+$texto_cuentas = $es_admin ? 'Catálogo Cuentas' : 'Ver mis coches';
+$demanda = $es_admin ? 'Si estas viendo esto y no trabajas para nosotros, preparate para una demanda.' : '';
 
 // Conexión a la base de datos
 include 'bdcon.php';
@@ -19,6 +22,12 @@ if (!$conn) {
     die("<div class='alert alert-error'>Conexión fallida: " . mysqli_connect_error() . "</div>");
 }
 ?>
+
+<style>
+#botones-admin {
+  display: none;
+}
+</style>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -37,7 +46,8 @@ if (!$conn) {
         </a>
         
         <h1>FORO COMPRAMOS TU COCHE</h1>
-        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?><?php echo $es_admin ? ' (Administrador)' : ''; ?></p>    
+        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?>, ¿Que desea hacer hoy?</p>  
+		
     </header>
     <nav>
         <a href="logout.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
@@ -47,14 +57,14 @@ if (!$conn) {
         <div class="contenido">
                 <h2>Tu portal de coches favorito</h2>
                 <p>Explora el catálogo, revisa tus vehículos o accede a tu cuenta.</p>
-
+                
                 <div id="botones">
-                    <!-- Botón dinámico según el rol del usuario -->
                     <a href="<?php echo $catalogo_destino; ?>" class="boton"><?php echo $texto_catalogo; ?></a>
                     <br>
-
-                    <a href="mis_coches.php" class="boton">Ver mis coches</a>
+                    <a href="<?php echo $cuentas_destino ; ?>" class="boton"><?php echo $texto_cuentas; ?></a>
                 </div>
+				<img src="../media/joseba-carglass.png" width="300" height="200"/>
+                <p style="color:Tomato;"><?php echo $demanda; ?></p>
     </nav>
     </main>
     

@@ -45,8 +45,8 @@ CREATE TABLE `usuarios` (
 --
 INSERT INTO `usuarios` (`id`, `nombre`, `apellidos`, `dni`, `telefono`, `fecha_nacimiento`, `email`, `dinero`, `username`, `password`, `es_admin`) VALUES
 (1, 'Admin', 'Sistema', '00000000-T', '600000000', '1990-01-01', 'admin@sistema.com', 50000.00, 'admin', 'admintest', 1),
-(2, 'Juan', 'Perez Garcia', '12345678-Z', '612345678', '1995-11-23', 'juan@example.com', 15000.00, 'juan', 'qwerty', 0);
-
+(2, 'Juan', 'Perez Garcia', '12345678-Z', '612345678', '1995-11-23', 'juan@example.com', 15000.00, 'juan', 'qwerty', 0),
+(3, 'Fernando Alonso', 'El nano f1', '42069420-Z', '666789021', '1456-10-23', 'emaildepruebasiesteemailnoesdeverdad@esteemailnoesdeverdad.com', 15000000.00, 'formula', '1', 0);
 
 --
 -- Estructura de tabla para la tabla `coches`
@@ -66,10 +66,12 @@ CREATE TABLE `coches` (
 --
 -- Volcado de datos para la tabla `coches`
 --
-INSERT INTO `coches` (`id`, `matricula`, `modelo`, `marca`, `color`, `kilometraje`, `precio`, `id_propietario`) VALUES
-(1, '1234-ABC', 'Model S', 'Tesla', 'Rojo', 20000, 75000.00, 2),
-(2, '5678-DEF', 'Civic', 'Honda', 'Azul', 50000, 20000.00, 2);
-
+INSERT INTO `coches` (`id`, `matricula`, `modelo`, `marca`, `color`, `kilometraje`, `precio`, `en_venta` , `id_propietario`) VALUES
+(1, '1234-ABC', 'Model S', 'Tesla', 'Rojo', 20000, 75000.00, 0, 2),
+(2, '5678-DEF', 'Civic', 'Honda', 'Azul', 50000, 20000.00, 0, 2),
+(3, '0149-DBC', 'F2012', 'Ferrari', 'rojo', 100000, 6000000.00, 1, 3),
+(4, '7864-PRK', 'AMR25', 'Aston Martin', 'gris', 1000, 10000000.00, 1, 3),
+(5, '1918-KGB', '21053', 'Lada', 'Blanco', 1000000, 20.00, 1, 3);
 
 --
 -- Índices para tablas volcadas
