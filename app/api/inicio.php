@@ -13,6 +13,7 @@ $catalogo_destino = $es_admin ? 'catalogoCocheAdmin.php' : 'catalogo.php';
 $texto_catalogo = $es_admin ? 'Catálogo Coches' : 'Catálogo de coches';
 $cuentas_destino = $es_admin ? 'catalogoCuentaAdmin.php' : 'mis_coches.php';
 $texto_cuentas = $es_admin ? 'Catálogo Cuentas' : 'Ver mis coches';
+$boton_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007bff;' ;
 $demanda = $es_admin ? 'Si estas viendo esto y no trabajas para nosotros, preparate para una demanda.' : '';
 
 // Conexión a la base de datos
@@ -22,12 +23,6 @@ if (!$conn) {
     die("<div class='alert alert-error'>Conexión fallida: " . mysqli_connect_error() . "</div>");
 }
 ?>
-
-<style>
-#botones-admin {
-  display: none;
-}
-</style>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -59,9 +54,9 @@ if (!$conn) {
                 <p>Explora el catálogo, revisa tus vehículos o accede a tu cuenta.</p>
                 
                 <div id="botones">
-                    <a href="<?php echo $catalogo_destino; ?>" class="boton"><?php echo $texto_catalogo; ?></a>
+                    <a href="<?php echo $catalogo_destino; ?>" class="boton" style="<?php echo $boton_color; ?>"><?php echo $texto_catalogo; ?></a>
                     <br>
-                    <a href="<?php echo $cuentas_destino ; ?>" class="boton"><?php echo $texto_cuentas; ?></a>
+                    <a href="<?php echo $cuentas_destino ; ?>" class="boton" style="<?php echo $boton_color; ?>"><?php echo $texto_cuentas; ?></a>
                 </div>
 				<img src="../media/joseba-carglass.png" width="300" height="200"/>
                 <p style="color:Tomato;"><?php echo $demanda; ?></p>

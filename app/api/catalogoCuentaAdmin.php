@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+//NOTA toda la parte de borrar usuarios funciona igual que en catalogoCocheAdmin.php, recomiendo mirarla en esa hoja para entenderla, porque a demás es más sencilla, en esta el mataUsuarios tiene dos sqls, no solo 1 (pero al margen de eso es lo mismo)
+
 // Verificar que el usuario esté logueado y sea admin
 if (!isset($_SESSION['usuario'])) {
     echo "Debes iniciar sesión para acceder a esta página.";
@@ -15,6 +17,25 @@ if ($_SESSION['es_admin'] != 1) {
 
 // Conexión a la base de datos
 include 'bdcon.php';
+
+//funcion para eliminar los usuarios
+function matausuarios($id){
+	//primero borramos los coches para que no quede coche sin usuario
+	$sql = "DELETE FROM coches WHERE propietario = $id";
+        global $conn;
+	mysqli_query($conn, $sql);
+	$sql = "DELETE FROM usuarios WHERE id = $id";
+	mysqli_query($conn, $sql);
+	return;
+}
+
+
+//lo que revisa la url en busca del id
+if (isset($_GET['br'])) {
+    matausuarios($_GET['br']);
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?') . "?eliminado=1");
+    exit();
+}
 
 // Consultar todos los coches con datos del propietario
 $sql = "SELECT id,nombre,apellidos,dni,telefono,fecha_nacimiento,email,dinero,username,password
@@ -52,7 +73,7 @@ if (mysqli_num_rows($result) > 0) {
         echo "<td>€" . number_format($row['dinero'], 2) . "</td>";
         echo "<td>" . htmlspecialchars($row['username']) . "</td>";
 		echo "<td>" . htmlspecialchars($row['password']) . "</td>";
-        echo "<td><a href='#' onclick=\"return confirm('¿Seguro que deseas eliminar este usuario?');\">Eliminar</a></td>";
+        echo "<td><a href='?br=" . $row['id'] . "' onclick=\"return confirm('¿Seguro que deseas eliminar este usuario?');\">Eliminar</a></td>";
         echo "</tr>";
     }
 
