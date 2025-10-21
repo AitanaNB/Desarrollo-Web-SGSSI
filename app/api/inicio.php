@@ -7,13 +7,21 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Determinar a qué catalogo redirigir según el tipo de usuario (si es admin mostrará una cosa, si no, la otra)
+/*
+---------------------Variables de código dinámico---------------------
+
+*ayudan a mostrar elementos distintos de la página dependiendo de si el usuario es admin o no 
+*Por ejemplo; determina a qué catalogo redirigir según el tipo de usuario (si es admin mostrará una cosa, si no, la otra)
+
+*/
 $es_admin = ($_SESSION['es_admin'] == 1);
 $catalogo_destino = $es_admin ? 'catalogoCocheAdmin.php' : 'catalogo.php';
 $texto_catalogo = $es_admin ? 'Catálogo Coches' : 'Catálogo de coches';
 $cuentas_destino = $es_admin ? 'catalogoCuentaAdmin.php' : 'mis_coches.php';
 $texto_cuentas = $es_admin ? 'Catálogo Cuentas' : 'Ver mis coches';
-$boton_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007bff;' ;
+$admin_title= $es_admin ? '- VISTA ADMINS' : '' ;
+$admin_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007bff;' ;
+$img_admin = $es_admin ? '/media/admin.png' : '/media/a.png';
 $demanda = $es_admin ? 'Si estás viendo esto y no trabajas para nosotros, prepárate para una demanda.' : '';
 
 // Conexión a la base de datos
@@ -34,13 +42,13 @@ if (!$conn) {
 </head>
 <body>
     
-     <header>
+     <header style="<?php echo $admin_color; ?>">
          <!-- Botón arriba a la derecha -->
          <a href="show_user.php" class="boton_Superior">  
-        <img src="/media/a.png">
+        <img src="<?php echo $img_admin; ?>">
         </a>
         
-        <h1>FORO COMPRAMOS TU COCHE</h1>
+        <h1>FORO COMPRAMOS TU COCHE <?php echo $admin_title; ?></h1>
         <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?>, ¿Qué desea hacer hoy?</p>  
 		
     </header>
@@ -54,9 +62,9 @@ if (!$conn) {
                 <p>Explora el catálogo, revisa tus vehículos o accede a tu cuenta.</p>
                 
                 <div id="botones">
-                    <a href="<?php echo $catalogo_destino; ?>" class="boton" style="<?php echo $boton_color; ?>"><?php echo $texto_catalogo; ?></a>
+                    <a href="<?php echo $catalogo_destino; ?>" class="boton" style="<?php echo $admin_color; ?>"><?php echo $texto_catalogo; ?></a>
                     <br>
-                    <a href="<?php echo $cuentas_destino ; ?>" class="boton" style="<?php echo $boton_color; ?>"><?php echo $texto_cuentas; ?></a>
+                    <a href="<?php echo $cuentas_destino ; ?>" class="boton" style="<?php echo $admin_color; ?>"><?php echo $texto_cuentas; ?></a>
                 </div>
 				<img src="../media/joseba-carglass.png" width="300" height="200"/>
                 <p style="color:Tomato;"><?php echo $demanda; ?></p>

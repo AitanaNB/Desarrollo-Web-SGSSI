@@ -56,7 +56,7 @@ $result = mysqli_query($conn, $sql);
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <header>
+    <header style="background-color: #c71435;">
         <div class="header-container">
             <div>
                 <h1>Catálogo de Coches (Admin)</h1>

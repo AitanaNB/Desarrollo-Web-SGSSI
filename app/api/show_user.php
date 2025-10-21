@@ -13,6 +13,14 @@ include 'bdcon.php';
 if (!$conn) {
     die("<div class='alert alert-error'>Conexión fallida: " . mysqli_connect_error() . "</div>");
 }
+
+//Determina si el user es admin
+$es_admin = ($_SESSION['es_admin'] == 1);
+
+//Prepara las variables dinámicas
+$admin_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007bff;' ;
+$admin_title= $es_admin ? '- ADMIN SETINGS' : '' ;
+
 // Obtener el ID del usuario logueado
 $user_id = $_SESSION['user_id'];
 
@@ -63,8 +71,8 @@ mysqli_close($conn);
     <script src="../js/validarDatos.js"></script> 
 </head>
 <body>
-    <header>
-        <h1>FORO COMPRAMOS TU COCHE</h1>
+    <header style="<?php echo $admin_color; ?>">
+        <h1>FORO COMPRAMOS TU COCHE <?php echo $admin_title; ?></h1>
         <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p> 
         <p>Aquí se pueden cambiar los datos personales.</p>      
     </header>

@@ -46,13 +46,13 @@ $result = mysqli_query($conn, $sql);
 
 <!DOCTYPE html>
 <html>
-<head>
+<head style="background-color: #c71435;">
     <title>Catálogo Universal de Usuarios - Admin</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <header>
+    <header style="background-color: #c71435;">
         <div class="header-container">
             <div>
                 <h1>Catálogo Universal de Usuarios (Admin)</h1>
