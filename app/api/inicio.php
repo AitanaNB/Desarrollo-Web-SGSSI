@@ -14,7 +14,7 @@ $texto_catalogo = $es_admin ? 'Catálogo Coches' : 'Catálogo de coches';
 $cuentas_destino = $es_admin ? 'catalogoCuentaAdmin.php' : 'mis_coches.php';
 $texto_cuentas = $es_admin ? 'Catálogo Cuentas' : 'Ver mis coches';
 $boton_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007bff;' ;
-$demanda = $es_admin ? 'Si estas viendo esto y no trabajas para nosotros, preparate para una demanda.' : '';
+$demanda = $es_admin ? 'Si estás viendo esto y no trabajas para nosotros, prepárate para una demanda.' : '';
 
 // Conexión a la base de datos
 include 'bdcon.php';
@@ -41,7 +41,7 @@ if (!$conn) {
         </a>
         
         <h1>FORO COMPRAMOS TU COCHE</h1>
-        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?>, ¿Que desea hacer hoy?</p>  
+        <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?>, ¿Qué desea hacer hoy?</p>  
 		
     </header>
     <nav>

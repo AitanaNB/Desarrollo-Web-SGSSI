@@ -46,39 +46,80 @@ $sql = "SELECT c.id, c.matricula, c.marca, c.modelo, c.color, c.kilometraje, c.p
 $result = mysqli_query($conn, $sql);
 
 // Mostrar los coches
-echo "<h2>Catálogo Universal de Coches</h2>";
-
-if (mysqli_num_rows($result) > 0) {
-    echo "<table border='1' cellpadding='8' cellspacing='0'>";
-    echo "<tr>
-            <th>ID</th>
-            <th>Matrícula</th>
-            <th>Marca</th>
-            <th>Modelo</th>
-            <th>Color</th>
-            <th>Kilometraje</th>
-            <th>Precio</th>
-            <th>Propietario</th>
-          </tr>";
-
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<tr>";
-        echo "<td>" . $row['id'] . "</td>";
-        echo "<td>" . htmlspecialchars($row['matricula']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['marca']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['modelo']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['color']) . "</td>";
-        echo "<td>" . number_format($row['kilometraje']) . " km</td>";
-        echo "<td>€" . number_format($row['precio'], 2) . "</td>";
-        echo "<td>" . htmlspecialchars($row['propietario']) . "</td>";
-        //vale, en esta parte metemos br=id en la url para notificar al codigo de php que tiene que empezar a borrar, y si, br el nombre al que asociamos el id, que es un stand in para borra, necesita el ?
-        //lo verdaderamente jodido es que para que funcione bien, hay que concatenar todo cutre, dividiendo la cadena de caracteres en dos, para unir el eliminar y el id porque si pones href='?eliminar_id=$row['id']' se liaría con las comillas el compilador
-        echo "<td><a href='?br=" . $row['id'] . "' onclick=\"return confirm('¿Seguro que deseas eliminar este coche?');\">Eliminar</a></td>";
-        echo "</tr>";
-    }
-
-    echo "</table>";
-} else {
-    echo "No hay coches registrados en el catálogo.";
-}
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Catálogo de Coches - Admin</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div>
+                <h1>Catálogo de Coches (Admin)</h1>
+                <p>Gestión completa de todos los vehículos - Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="inicio.php">Inicio</a> |
+        <a href="catalogoCuentaAdmin.php">Gestionar usuarios</a> |
+        <a href="logout.php">Cerrar sesión (<?php echo htmlspecialchars($_SESSION['usuario']); ?>)</a>
+    </nav>
+
+    <main>
+        <?php
+            // Mostrar mensaje de éxito si se eliminó un coche
+            if (isset($_GET['eliminado']) && $_GET['eliminado'] == 1) {
+                echo '<div class="alert alert-success"> Coche eliminado correctamente</div>';
+            }
+
+            // Verificar si la consulta fue exitosa y tiene resultados
+            if (mysqli_num_rows($result) > 0) {
+                echo "<table border='1' cellpadding='8' cellspacing='0'>";
+                echo "<tr>
+                        <th>ID</th>
+                        <th>Matrícula</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Color</th>
+                        <th>Kilometraje</th>
+                        <th>Precio</th>
+                        <th>Propietario</th>
+                        <th>Acción</th>
+                    </tr>";
+
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['id'] . "</td>";
+                    echo "<td>" . htmlspecialchars($row['matricula']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['marca']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['modelo']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['color']) . "</td>";
+                    echo "<td>" . number_format($row['kilometraje']) . " km</td>";
+                    echo "<td>€" . number_format($row['precio'], 2) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['propietario']) . "</td>";
+                    //vale, en esta parte metemos br=id en la url para notificar al codigo de php que tiene que empezar a borrar, y si, br el nombre al que asociamos el id, que es un stand in para borra, necesita el ?
+                    //lo verdaderamente jodido es que para que funcione bien, hay que concatenar todo cutre, dividiendo la cadena de caracteres en dos, para unir el eliminar y el id porque si pones href='?eliminar_id=$row['id']' se liaría con las comillas el compilador
+                    echo "<td><a href='?br=" . $row['id'] . "' onclick=\"return confirm('¿Seguro que deseas eliminar este coche?');\">Eliminar</a></td>";
+                    echo "</tr>";
+                }
+
+                echo "</table>";
+            } else {
+                echo "No hay coches registrados en el catálogo.";
+            }
+            
+            // Cerrar la conexión
+            mysqli_close($conn);
+        ?>
+    </main>
+    <footer>
+        <a href="https://github.com/AitanaNB/Desarrollo-Web-SGSSI">Nuestro maravilloso y organizado código está disponible en Github</a>
+    </footer>
+    </body>
+</html>
