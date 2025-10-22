@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Conexión a la base de datos
 include 'bdcon.php'; // Este archivo debe definir: $conn
 
@@ -23,7 +24,15 @@ VALUES (
     )";
 
 if ($conn->query($sql) === TRUE) {
-    echo "Usuario registrado con éxito";
+ // Guardar datos de sesión
+    $_SESSION['user_id']  = $conn->insert_id;
+    $_SESSION['usuario']  = $username;
+    $_SESSION['nombre']   = $nombre;
+    $_SESSION['es_admin'] = 0;
+
+    // Redirigir
+    header("Location: inicio.php");
+    exit();
 } else {
     echo "Error: " . $conn->error;
 }
