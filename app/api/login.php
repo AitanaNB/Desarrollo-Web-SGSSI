@@ -35,11 +35,16 @@ if (mysqli_num_rows($result) === 1) {
         exit();
     } else {
         // Contraseña incorrecta
-        echo "Usuario o contraseña incorrectos.";
+    echo "<h3>Error al iniciar sesión, contraseña incorrecta.</h3>";
+    echo "<a href='../index.php' style='display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al inicio</a>";
+    echo "</div>";
+    exit();
     }
 } else {
     // Usuario no encontrado
-    echo "Usuario o contraseña incorrectos.";
+    echo "<h3>Error al iniciar sesión, usuario no encontrado.</h3>";
+    echo "<a href='../index.php' style='display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al inicio</a>";
+    echo "</div>";
 }
 
 //mysqli_close($conn);

@@ -22,10 +22,10 @@ include './api/bdcon.php';
        <div class="contenido">
             <img src="media/coche.jpg" width="300" height="200"/>
             <br>
-
+            <!-- cargar contenido en función del botón, llamando a la función mostrar !-->
             <button class="boton" onclick="mostrar('login')">Iniciar sesión</button>
             <button class="boton" onclick="mostrar('registro')">Registrarse</button>
-            
+            <!-- carga aquí, con innerHTML !-->
             <div id="contenido"></div> 
         </div>
     </main>
@@ -35,19 +35,13 @@ include './api/bdcon.php';
             const div = document.getElementById('contenido');
             if(tipo === 'login'){
                 div.innerHTML = `
-                    <div class="form-box">
                     <h3>Iniciar sesión</h3>
                     <form action="/api/login.php" method="POST">
-                        <label>Usuario:</label><br><input type="text" name="usuario" required><br>
-                        <label>Contraseña:</label><br><input type="password" name="password" required><br><br>
+                        <label>Usuario:</label><br><input type="text" name="usuario" id="usuario" required><br>
+                        <label>Contraseña:</label><br><input type="password" name="password" id="password" required><br><br>
                         <input type="submit" value="Entrar">
                     </form>
-                    <div id="loginMsg"></div>
-                    <div id="loginError"></div>
-                </div>
-                `;
-                //listener
-                //document.getElement
+               `;
             } else if(tipo === 'registro'){ //VALIDANDO FORMATO
                 div.innerHTML = `
                     <h3>Registrarse</h3>
@@ -73,7 +67,6 @@ include './api/bdcon.php';
 
 <br>
 <footer>
-    <!--&copy; <?= date('Y') ?> <br>-->
      <a href="https://github.com/AitanaNB/Desarrollo-Web-SGSSI">Nuestro maravilloso y organizado código está disponible en Github</a>
      
 </footer>
