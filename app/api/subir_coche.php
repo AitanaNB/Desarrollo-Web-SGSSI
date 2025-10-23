@@ -105,11 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </tr>
                     <tr>
                         <td><label for="kilometraje">Kilometraje:</label></td>
-                        <td><input type="number" id="kilometraje" name="kilometraje" required></td>
+                        <td><input type="number" id="kilometraje" name="kilometraje" min="0" max="9999999" value="<?php echo htmlspecialchars($coche['kilometraje']); ?>"></td>
                     </tr>
                     <tr>
                         <td><label for="precio">Precio:</label></td>
-                        <td><input type="number" step="0.01" id="precio" name="precio" required></td>
+                        <td><input type="number" id="precio" max="99999999.99" step="0.01" name="precio" required></td>
                     </tr>
                     <tr>
                         <td><label for="en_venta">En venta:</label></td>
