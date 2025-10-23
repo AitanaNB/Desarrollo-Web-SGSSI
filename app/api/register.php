@@ -13,6 +13,34 @@ $email = $_POST['email'];
 $username = $_POST['username'];
 $password = $_POST['password'];
 
+// Verificar si el DNI ya existe en la base de datos
+$check_dni_sql = "SELECT id FROM usuarios WHERE dni = '$dni'";
+$result = mysqli_query($conn, $check_dni_sql);
+
+if (mysqli_num_rows($result) > 0) {
+    // Si el DNI ya existe, mostrar mensaje de error
+    echo "<h3>Error en el registro</h3>";
+    echo "<p>El DNI <strong>$dni</strong> ya está registrado en el sistema.</p>";
+    echo "<p>Por favor, verifica tus datos o utiliza un DNI diferente.</p>";
+    echo "<a href='../index.php' style='display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al registro</a>";
+    echo "</div>";
+    exit();
+}
+
+// También verificar si el username ya existe
+$check_username_sql = "SELECT id FROM usuarios WHERE username = '$username'";
+$result_username = mysqli_query($conn, $check_username_sql);
+
+if (mysqli_num_rows($result_username) > 0) {
+    // Si el username ya existe, mostrar mensaje de error
+    echo "<h3>Error en el registro</h3>";
+    echo "<p>El nombre de usuario <strong>$username</strong> ya está registrado en el sistema.</p>";
+    echo "<p>Por favor, elige un nombre de usuario diferente.</p>";
+    echo "<a href='../index.php' style='display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al registro</a>";
+    echo "</div>";
+    exit();
+}
+
 /// Insertar en la base de datos
 //$stmt = $conn->prepare("INSERT INTO usuarios (nombre, email) VALUES (?, ?)");
 //$stmt->bind_param("ss", $nombre, $email); version xa evitar injeccion?
