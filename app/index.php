@@ -55,8 +55,8 @@ include './api/bdcon.php';
                         Nombre: <br><input type="text" name="nombre" required><br>
                         Apellidos: <br><input type="text" name="apellidos" required><br>
                         DNI (formato 11111111-X): <br><input type="text" name="dni" id="dni" maxlength="10" pattern="^\\d{8}-[A-Z]$" required
-                        title="Debe tener 8 números, un guion y una letra mayúscula, como 12345678-Z"><br>
-                        Tlf: <br><input type="text" name="telefono" pattern="^\\d{9}$" required ><br>
+                        title="Debe tener 8 números, un guion y una letra mayúscula, como 12345678-Z" placeholder="11111111-X"><br>
+                        Tlf: <br><input type="text" name="telefono" pattern="^\\d{9}$"  maxlength="9" required placeholder="123456789"><br>
                         Fecha nacimiento: <br><input type="date" name="fecha_nacimiento" required><br>
                         Email: <br><input type="email" name="email" required><br>
                         Username: <br><input type="text" name="username" required><br>

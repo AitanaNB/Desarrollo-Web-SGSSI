@@ -19,7 +19,7 @@ $es_admin = ($_SESSION['es_admin'] == 1);
 
 //Prepara las variables dinámicas
 $admin_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007bff;' ;
-$admin_title= $es_admin ? '- ADMIN SETINGS' : '' ;
+$admin_title= $es_admin ? '- ADMIN SETTINGS' : '' ;
 
 // Obtener el ID del usuario logueado
 $user_id = $_SESSION['user_id'];
@@ -124,7 +124,7 @@ mysqli_close($conn);
                 <tr>
                     <th>Dinero disponible:</th>
                     <td><?= htmlspecialchars($usuario['dinero']); ?></td>
-                    <td><input type="text" name="dinero" value="<?= htmlspecialchars($usuario['dinero']); ?>"></td>
+                    <td><input type="number" name="dinero" max="99999999.99" step="0.01" value="<?= htmlspecialchars($usuario['dinero']); ?>"></td>
                 </tr>
             </table>
             <button type="submit">Guardar cambios</button>
