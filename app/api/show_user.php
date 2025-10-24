@@ -21,6 +21,9 @@ $es_admin = ($_SESSION['es_admin'] == 1);
 $admin_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007bff;' ;
 $admin_title= $es_admin ? '- ADMIN SETTINGS' : '' ;
 
+//Expropia a los admins de su dinero (No les deja usar dinero)(en lugar de block, usamos table-row para mostrarlo porque es un elemento del tipo tabla)
+$admin_sin_dinero= $es_admin ? 'display: none;' : 'display: table-row;' ;
+
 // Obtener el ID del usuario logueado
 $user_id = $_SESSION['user_id'];
 
@@ -121,7 +124,7 @@ mysqli_close($conn);
                     <td><?= htmlspecialchars($usuario['username']); ?></td>
                     <td><input type="text" name="username" value="<?= htmlspecialchars($usuario['username']); ?>"></td>
                 </tr>
-                <tr>
+                <tr style="<?php echo $admin_sin_dinero; ?>">
                     <th>Dinero disponible:</th>
                     <td><?= htmlspecialchars($usuario['dinero']); ?></td>
                     <td><input type="number" name="dinero" max="99999999.99" step="0.01" value="<?= htmlspecialchars($usuario['dinero']); ?>"></td>
