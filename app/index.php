@@ -1,4 +1,9 @@
 <?php
+/**
+ * Estructura inspirada en código con Licencia MIT.
+ * Fuente original: https://github.com/Xabierland/SGSSI-Proyecto 
+ * Copyright (c) 2023
+ */
 session_start();
 include './api/bdcon.php';
  
