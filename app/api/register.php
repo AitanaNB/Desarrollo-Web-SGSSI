@@ -62,6 +62,6 @@ if ($conn->query($sql) === TRUE) {
     header("Location: inicio.php");
     exit();
 } else {
-    echo "Error: " . $conn->error;
+    echo "Error";
 }
 ?>

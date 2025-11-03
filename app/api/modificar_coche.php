@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: mis_coches.php?id=$coche_id"); // Redirige a mis_coches.php con un parámetro de éxito
                 exit();
             } else { // Si falla, crea un mensaje de error
-                $mensaje = "<div class='alert alert-error'>Error al actualizar el coche: " . mysqli_error($conn) . "</div>";
+                $mensaje = "<div class='alert alert-error'>Error al actualizar el coche. Por favor, revise los datos.</div>";
             }
         }
         

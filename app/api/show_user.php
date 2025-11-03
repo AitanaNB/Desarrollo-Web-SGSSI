@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mysqli_query($conn, $sql_update)) {
         echo "<div class='alert alert-success'>Datos actualizados correctamente.</div>";
     } else {
-        echo "<div class='alert alert-error'>Error al actualizar: " . mysqli_error($conn) . "</div>";
+        echo "<div class='alert alert-error'>Error al actualizar. </div>";
     }
 }
 // Obtener los datos actualizados del usuario

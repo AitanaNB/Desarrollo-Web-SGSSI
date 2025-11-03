@@ -18,7 +18,7 @@ function validarDni(){
                 return false;
             }
 
-            return true; // Todo correcto
+            return true;
 }
 
 function validarCoche(){
@@ -53,5 +53,5 @@ function validarCoche(){
         return false;
     }
 
-    return true; // Todo correcto
+    return true;
 }

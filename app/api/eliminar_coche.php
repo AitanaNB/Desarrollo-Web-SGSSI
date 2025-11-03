@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_coche'])) {
         header("Location: mis_coches.php");
         exit();
     } else {
-        echo "Error al eliminar el coche: " . $conn->error;
+        echo "Error al eliminar el coche.";
     }
 }
 

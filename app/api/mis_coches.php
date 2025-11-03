@@ -74,7 +74,7 @@ if (!$conn) {
 
         // Verificar si hay error en la consulta
         if ($result === false) {
-            echo "<div class='alert alert-error'>Error en la consulta: " . mysqli_error($conn) . "</div>";
+            echo "<div class='alert alert-error'>Error en la consulta.</div>";
         }
         // Verificar si la consulta fue exitosa y tiene resultados
         else if (mysqli_num_rows($result) > 0) {

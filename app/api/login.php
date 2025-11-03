@@ -12,6 +12,13 @@ if (!$conn) {
 $usuario = $_POST['usuario'];
 $password = $_POST['password'];
 
+// Definir un mensaje de error genérico
+$error_generico = "<h3>Error al iniciar sesión</h3>
+<p>Usuario o contraseña incorrectos.</p>
+<a href='../index.php' style='display: inline-block; padding: 10px
+15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al inicio</a>
+</div>";
+
 // Usar consultas preparadas para evitar SQL injection
 $sql = "SELECT * FROM usuarios WHERE username = ?";
 $stmt = mysqli_prepare($conn, $sql);
@@ -35,16 +42,12 @@ if (mysqli_num_rows($result) === 1) {
         exit();
     } else {
         // Contraseña incorrecta
-    echo "<h3>Error al iniciar sesión, contraseña incorrecta.</h3>";
-    echo "<a href='../index.php' style='display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al inicio</a>";
-    echo "</div>";
+    echo $error_generico;
     exit();
     }
 } else {
     // Usuario no encontrado
-    echo "<h3>Error al iniciar sesión, usuario no encontrado.</h3>";
-    echo "<a href='../index.php' style='display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al inicio</a>";
-    echo "</div>";
+    echo $error_generico;
 }
 
 //mysqli_close($conn);
