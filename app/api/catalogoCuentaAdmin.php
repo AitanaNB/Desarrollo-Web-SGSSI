@@ -1,4 +1,7 @@
 <?php
+ini_set('session.cookie_httponly', 1)
+ini_set('session.cookie_secure', 1)
+ini_set('session.use_only_cookies', 1)
 session_start();
 
 //NOTA toda la parte de borrar usuarios funciona igual que en catalogoCocheAdmin.php, recomiendo mirarla en esa hoja para entenderla, porque a demás es más sencilla, en esta el mataUsuarios tiene dos sqls, no solo 1 (pero al margen de eso es lo mismo)

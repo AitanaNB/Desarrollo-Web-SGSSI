@@ -1,4 +1,9 @@
 <?php
+ini_set('session.cookie_httponly', 1)
+ini_set('session.cookie_secure', 1)
+ini_set('session.use_only_cookies', 1)
+header("X-Frame-Options: SAMEORIGIN");
+header("Content-Security-Policy: frame-ancestors 'self'");
 session_start();
 // Conexión a la base de datos
 include 'bdcon.php'; // Este archivo debe definir: $conn

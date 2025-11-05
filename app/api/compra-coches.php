@@ -1,6 +1,8 @@
 <?php
-//esto no se que hace pero confio en el criterio de Ziyang
- session_start();
+ini_set('session.cookie_httponly', 1)
+ini_set('session.cookie_secure', 1)
+ini_set('session.use_only_cookies', 1)
+session_start();
 
 //por alguna razon en este se me liaba a menos de que especificase e inicio del json, no se si es que habrá algun otro mensaje anterior que estuviese leyendo como json o que 
 header('Content-Type: application/json');

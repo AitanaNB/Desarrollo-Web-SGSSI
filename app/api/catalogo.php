@@ -1,6 +1,8 @@
 <?php
 
-//esto no se que hace
+ini_set('session.cookie_httponly', 1)
+ini_set('session.cookie_secure', 1)
+ini_set('session.use_only_cookies', 1)
 session_start();
 
 // Verificar si el usuario está logueado, y le lleva a loguearse si no
