@@ -6,6 +6,21 @@ ini_set('session.use_only_cookies', 1);
 
 session_start();
 
+// Para PHP 7.2.2, configuramos SameSite manualmente
+if (version_compare(PHP_VERSION, '7.3.0', '<')) {
+    // Se obtiene información de la sesión actual
+    $session_name = session_name();
+    $session_id = session_id();
+    if (!empty($session_id)) {
+        $path = $current_params['path'];
+        $domain = $current_params['domain'];
+        $secure = $current_params['secure'] ? 'Secure;' : '';
+        // SameSite Attribute
+        // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
+        header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
+    }
+}
+
 //NOTA toda la parte de borrar usuarios funciona igual que en catalogoCocheAdmin.php, recomiendo mirarla en esa hoja para entenderla, porque a demás es más sencilla, en esta el mataUsuarios tiene dos sqls, no solo 1 (pero al margen de eso es lo mismo)
 
 // Verificar que el usuario esté logueado y sea admin
