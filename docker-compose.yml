@@ -10,6 +10,7 @@ services:
       volumes:
         - ./app:/var/www/html/
         - ./.docker/php/conf.d/adicional.ini:/usr/local/etc/php/conf.d/adicional.ini
+        - ./.docker/apache/adicional.conf:/etc/apache2/conf-enabled/adicional.conf
 
    db:
      image: mariadb:10.8.2
