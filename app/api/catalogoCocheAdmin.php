@@ -53,7 +53,7 @@ try{
 
 <!-- popup confirmación -->
 <div id="popup-confirmacion-admin">
-	<h2  id="texto-confirmacion-admin" >¿Admin seguro de que quieres eliminar el coche?</h2>
+	<h2  id="texto-confirmacion-admin" >¿Admin, seguro que quieres ELIMINAR el coche?</h2>
 	<p>Esta acción no se puede deshacer.</p>
 	<button class="boton-popup" id="boton-confirmar-eliminacion" onclick="document.getElementById('popup-confirmacion-admin').style.display='none'">Si</button>
 	<button class="boton-popup" onclick="document.getElementById('popup-confirmacion-admin').style.display='none'">No</button>
@@ -143,7 +143,7 @@ $(document).ready(function () {
 	//Con el 'this seleccionamos el eelemento más cercano al que se ha clicado del tipo tr, y luego buscamos el primer td que debería de tener el id'
 	idSeleccionado = $(this).closest('tr').find('td').eq(0).text()
 	//cambiamos texto del mensaje 
-	document.getElementById('texto-confirmacion-admin').innerText =`¿Admin seguro de que quieres eliminar el coche de matricula ${$(this).closest('tr').find('td').eq(1).text()} ?`;
+	document.getElementById('texto-confirmacion-admin').innerText =`¿Admin, seguro que quieres ELIMINAR el coche de matrícula ${$(this).closest('tr').find('td').eq(1).text()} ?`;
 	//hacemos la ventana pop-up visible
     document.getElementById('popup-confirmacion-admin').style.display = 'block';
   });
