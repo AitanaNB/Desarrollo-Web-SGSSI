@@ -6,6 +6,8 @@ ini_set('session.use_only_cookies', 1);
 
 session_start();
 
+header('Content-Type: application/json');
+
 // Para PHP 7.2.2, configuramos SameSite manualmente
 if (version_compare(PHP_VERSION, '7.3.0', '<')) {
     // Se obtiene información de la sesión actual
@@ -20,6 +22,21 @@ if (version_compare(PHP_VERSION, '7.3.0', '<')) {
         header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
     }
 }
+
+// Content-Security-Policy (CSP)
+/* Nota: Se requiere 'unsafe-inline' y 'unsafe-eval' para que el código actual funcione
+debido al uso de JavaScript/CSS en línea y jQuery. Para una solución completa, 
+se debe migrar el código en línea a archivos externos o usar Nonces/Hashes. */
+$csp_policy = "default-src 'self'; ";
+$csp_policy .= "script-src 'self' 'unsafe-inline'; "; 
+$csp_policy .= "style-src 'self' 'unsafe-inline'; ";
+$csp_policy .= "img-src 'self' data:; "; 
+$csp_policy .= "frame-ancestors 'none';"; // Alternativa al X-Frame-Options
+
+// Agrega directivas sin fallback (base-uri y form-action)
+$csp_policy .= "base-uri 'self'; ";
+$csp_policy .= "form-action 'self'; ";
+header("Content-Security-Policy: " . $csp_policy);
  
 
 // Verificar si el usuario está logueado

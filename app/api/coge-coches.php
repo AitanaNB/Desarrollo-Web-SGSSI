@@ -7,6 +7,8 @@ ini_set('session.use_only_cookies', 1);
 //esto ahora se que hace, si no tienes esto, no puedes acceder a las variables de sesión y entonces te va a saltar el "if (!isset($_SESSION['user_id']))"
 session_start();
 
+header('Content-Type: application/json');
+
 // Para PHP 7.2.2, configuramos SameSite manualmente
 if (version_compare(PHP_VERSION, '7.3.0', '<')) {
     // Se obtiene información de la sesión actual
@@ -21,6 +23,21 @@ if (version_compare(PHP_VERSION, '7.3.0', '<')) {
         header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
     }
 }
+
+// Content-Security-Policy (CSP)
+/* Nota: Se requiere 'unsafe-inline' y 'unsafe-eval' para que el código actual funcione
+debido al uso de JavaScript/CSS en línea y jQuery. Para una solución completa, 
+se debe migrar el código en línea a archivos externos o usar Nonces/Hashes. */
+$csp_policy = "default-src 'self'; ";
+$csp_policy .= "script-src 'self' 'unsafe-inline'; "; 
+$csp_policy .= "style-src 'self' 'unsafe-inline'; ";
+$csp_policy .= "img-src 'self' data:; "; 
+$csp_policy .= "frame-ancestors 'none';"; // Alternativa al X-Frame-Options
+
+// Agrega directivas sin fallback (base-uri y form-action)
+$csp_policy .= "base-uri 'self'; ";
+$csp_policy .= "form-action 'self'; ";
+header("Content-Security-Policy: " . $csp_policy);
 
 // LLamada a la conexion de la base de datos 
 include 'bdcon.php';

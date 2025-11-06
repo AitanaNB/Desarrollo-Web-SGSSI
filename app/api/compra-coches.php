@@ -21,6 +21,21 @@ if (version_compare(PHP_VERSION, '7.3.0', '<')) {
     }
 }
 
+// Content-Security-Policy (CSP)
+/* Nota: Se requiere 'unsafe-inline' y 'unsafe-eval' para que el código actual funcione
+debido al uso de JavaScript/CSS en línea y jQuery. Para una solución completa, 
+se debe migrar el código en línea a archivos externos o usar Nonces/Hashes. */
+$csp_policy = "default-src 'self'; ";
+$csp_policy .= "script-src 'self' 'unsafe-inline'; "; 
+$csp_policy .= "style-src 'self' 'unsafe-inline'; ";
+$csp_policy .= "img-src 'self' data:; "; 
+$csp_policy .= "frame-ancestors 'none';"; // Alternativa al X-Frame-Options
+
+// Agrega directivas sin fallback (base-uri y form-action)
+$csp_policy .= "base-uri 'self'; ";
+$csp_policy .= "form-action 'self'; ";
+header("Content-Security-Policy: " . $csp_policy);
+
 //por alguna razon en este se me liaba a menos de que especificase e inicio del json, no se si es que habrá algun otro mensaje anterior que estuviese leyendo como json o que 
 header('Content-Type: application/json');
 

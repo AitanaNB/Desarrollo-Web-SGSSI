@@ -26,6 +26,16 @@ if (version_compare(PHP_VERSION, '7.3.0', '<')) {
     }
 }
 
+// Content-Security-Policy (CSP)
+$csp_policy = "default-src 'self'; ";
+$csp_policy .= "script-src 'self'; "; 
+$csp_policy .= "style-src 'self';";
+$csp_policy .= "img-src 'self' data:; ";
+$csp_policy .= "base-uri 'self'; ";
+$csp_policy .= "form-action 'self'; ";
+$csp_policy .= "frame-ancestors 'none';";
+header("Content-Security-Policy: " . $csp_policy);
+
 include './api/bdcon.php';
  
 
@@ -38,6 +48,7 @@ include './api/bdcon.php';
     <link rel="stylesheet" href="/css/style.css">
     <link rel="shortcut icon" href="media/icon.svg" />
     <script src="js/validarDatos.js"></script> 
+    <script src="js/index.js"></script>
 </head>
 <body>
     <header>
@@ -49,48 +60,11 @@ include './api/bdcon.php';
             <img src="media/coche.jpg" width="300" height="200"/>
             <br>
             <!-- cargar contenido en función del botón, llamando a la función mostrar !-->
-            <button class="boton" onclick="mostrar('login')">Iniciar sesión</button>
-            <button class="boton" onclick="mostrar('registro')">Registrarse</button>
-            <!-- carga aquí, con innerHTML !-->
+            <button class="boton" id="login-button">Iniciar sesión</button>
+            <button class="boton" id="register-button">Registrarse</button>
             <div id="contenido"></div> 
         </div>
     </main>
-    <script>
-      //para cargar contenido
-        function mostrar(tipo) {
-            const div = document.getElementById('contenido');
-            if(tipo === 'login'){
-                div.innerHTML = `
-                    <h3>Iniciar sesión</h3>
-                    <form action="/api/login.php" method="POST">
-                        <label>Usuario:</label><br><input type="text" name="usuario" id="usuario" required><br>
-                        <label>Contraseña:</label><br><input type="password" name="password" id="password" required><br><br>
-                        <input type="submit" value="Entrar">
-                    </form>
-               `;
-            } else if(tipo === 'registro'){ //VALIDANDO FORMATO
-                div.innerHTML = `
-                    <h3>Registrarse</h3>
-                    <form action="/api/register.php" method="POST" onsubmit="return validarDni()">
-                        Nombre: <br><input type="text" name="nombre" required><br>
-                        Apellidos: <br><input type="text" name="apellidos" required><br>
-                        DNI (formato 11111111-X): <br><input type="text" name="dni" id="dni" maxlength="10" pattern="^\\d{8}-[A-Z]$" required
-                        title="Debe tener 8 números, un guion y una letra mayúscula, como 12345678-Z" placeholder="11111111-X"><br>
-                        Tlf: <br><input type="text" name="telefono" pattern="^\\d{9}$"  maxlength="9" required placeholder="123456789"><br>
-                        Fecha nacimiento: <br><input type="date" name="fecha_nacimiento" required><br>
-                        Email: <br><input type="email" name="email" required><br>
-                        Username: <br><input type="text" name="username" required><br>
-                        Contraseña: <br><input type="password" name="password" required><br><br>
-                        <input type="submit" value="Registrarse">
-                    </form>
-                `;
-                
-            }
-                    
-        }
-
-    </script>
-
 <br>
 <footer>
      <a href="https://github.com/AitanaNB/Desarrollo-Web-SGSSI">Nuestro maravilloso y organizado código está disponible en Github</a>
