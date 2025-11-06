@@ -1,21 +1,19 @@
 <?php
-ini_set('session.cookie_httponly', 1)
-ini_set('session.cookie_secure', 1)
-ini_set('session.use_only_cookies', 1)
+
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
+
 session_start();
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../index.php");
     exit();
 }
 
 // Conexión a la base de datos
 include 'bdcon.php';
-
-if (!$conn) {
-    die("<div class='alert alert-error'>Conexión fallida: " . mysqli_connect_error() . "</div>");
-}
 
 //Determina si el user es admin
 $es_admin = ($_SESSION['es_admin'] == 1);
@@ -32,40 +30,59 @@ $user_id = $_SESSION['user_id'];
 
 // Si se ha enviado el formulario, actualizamos los datos
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre = $_POST['nombre'];
-    $apellidos = $_POST['apellidos'];
-    $dni = $_POST['dni'];
-    $telefono = $_POST['telefono'];
-    $fecha_nacimiento = $_POST['fecha_nacimiento'];
-    $email = $_POST['email'];
-    $dinero = $_POST['dinero'];
-    $username = $_POST['username'];
+    
+	try{
+		$nombre = $_POST['nombre'];
+		$apellidos = $_POST['apellidos'];
+		$dni = $_POST['dni'];
+		$telefono = $_POST['telefono'];
+		$fecha_nacimiento = $_POST['fecha_nacimiento'];
+		$email = $_POST['email'];
+		$dinero = $_POST['dinero'];
+		$username = $_POST['username'];
+		
+		$conn->beginTransaction();
+		
+		// Consulta UPDATE
+		$sql_update = "UPDATE usuarios SET
+			nombre = :nombre,
+			apellidos = :apellidos,
+			dni = :dni,
+			telefono = :telefono,
+			fecha_nacimiento = :fecha_nacimiento,
+			email = :email,
+			dinero = :dinero,
+			username = :username
+			WHERE id = :user_id";
+		$params = [':nombre' => $nombre,':apellidos' => $apellidos,':dni' => $dni,':telefono' => $telefono,':fecha_nacimiento' => $fecha_nacimiento,':email' => $email,':dinero' => $dinero,':username' => $username,':user_id' => $user_id];
+		$stmt = $conn->prepare($sql_update);
+		$stmt->execute($params);
+		
+		$conn->commit();
+		
+		// Como de costumbre, esto solo se mostrará si va todo bien
+		echo "<div class='alert alert-success'>Datos actualizados correctamente.</div>";
 
-    // Consulta UPDATE
-    $sql_update = "UPDATE usuarios SET
-        nombre = '$nombre',
-        apellidos = '$apellidos',
-        dni = '$dni',
-        telefono = $telefono,
-        fecha_nacimiento = '$fecha_nacimiento',
-        email = '$email',
-        dinero = '$dinero',
-        username = '$username'
-        WHERE id = $user_id";
-
-    if (mysqli_query($conn, $sql_update)) {
-        echo "<div class='alert alert-success'>Datos actualizados correctamente.</div>";
-    } else {
-        echo "<div class='alert alert-error'>Error al actualizar. </div>";
-    }
+	} catch (PDOException $e) {
+		//En caso de estar en una transaccion, hechamos atrás, pués algo ha ido horrorosamente mal
+		if ($conn->inTransaction()) $conn->rollBack();
+		echo "<div class='alert alert-error'>Error al actualizar: " . htmlspecialchars($e->getMessage()) .  "</div>";
+	}
 }
-// Obtener los datos actualizados del usuario
-$sql = "SELECT id, nombre, apellidos, dni, telefono, fecha_nacimiento, email, dinero, username  
-        FROM usuarios WHERE id = $user_id";
-$result = mysqli_query($conn, $sql);
-$usuario = mysqli_fetch_assoc($result);
+//metemos la otra consulta en un try,catch diferente (porque la otra está en un if)
+try{
+	// Obtener los datos actualizados del usuario
+	$sql = "SELECT id, nombre, apellidos, dni, telefono, fecha_nacimiento, email, dinero, username  
+        FROM usuarios WHERE id = :user_id";
+	$params = [':user_id' => $user_id];
+	$stmt = $conn->prepare($sql);
+	$stmt->execute($params);
+	$usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+	echo "<div class='alert alert-error'>Error al coger los datos " . htmlspecialchars($e->getMessage()) .  "</div>";
+}
 
-mysqli_close($conn);
+//No hace falta cerrar las conexiones, las cierra automáticamente php (Al menos en PDO)
 ?>
 <!DOCTYPE html>
 <html lang="es">

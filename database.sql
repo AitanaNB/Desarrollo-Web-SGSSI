@@ -42,11 +42,12 @@ CREATE TABLE `usuarios` (
 
 --
 -- Volcado de datos para la tabla `usuarios`
+-- contraseñas por si no os acordais (el testo de contrasña es al que equivale el hash) (formula -> 1 ; juan -> querty ; admin -> admintest)
 --
 INSERT INTO `usuarios` (`id`, `nombre`, `apellidos`, `dni`, `telefono`, `fecha_nacimiento`, `email`, `dinero`, `username`, `password`, `es_admin`) VALUES
-(1, 'Admin', 'Sistema', '00000000-T', '600000000', '1990-01-01', 'admin@sistema.com', 50000.00, 'admin', 'admintest', 1),
-(2, 'Juan', 'Perez Garcia', '12345678-Z', '612345678', '1995-11-23', 'juan@example.com', 15000.00, 'juan', 'qwerty', 0),
-(3, 'Fernando Alonso', 'El nano f1', '42069420-Z', '666789021', '1456-10-23', 'emaildepruebasiesteemailnoesdeverdad@esteemailnoesdeverdad.com', 15000000.00, 'formula', '1', 0);
+(1, 'Admin', 'Sistema', '00000000-T', '600000000', '1990-01-01', 'admin@sistema.com', 50000.00, 'admin', '$2a$12$ILSTIICNJFAnqvD5kdDkr.CQ33j6uNe.d584toG8VTdxJO3zHZAau', 1),
+(2, 'Juan', 'Perez Garcia', '12345678-Z', '612345678', '1995-11-23', 'juan@example.com', 15000.00, 'juan', '$2a$10$Vc3lqjDjnun8vE.Ei274sOqbykeZdf9WyyFjTAUH1ElWGPN.SZdJS', 0),
+(3, 'Fernando Alonso', 'El nano f1', '42069420-Z', '666789021', '1456-10-23', 'emaildepruebasiesteemailnoesdeverdad@esteemailnoesdeverdad.com', 15000000.00, 'formula', '$2a$17$uPSWTqtvZQbkAtoGinG6lu8eEU0el8wO5IPMnCiCdw9V4X6DQ1qie', 0);
 
 --
 -- Estructura de tabla para la tabla `coches`

@@ -1,7 +1,9 @@
 <?php
-ini_set('session.cookie_httponly', 1)
-ini_set('session.cookie_secure', 1)
-ini_set('session.use_only_cookies', 1)
+
+ini_set('session.cookie_httponly', 1); 
+ini_set('session.cookie_secure', 1);  
+ini_set('session.use_only_cookies', 1); 
+
 session_start();
 
 // Verificar que el usuario esté logueado y sea admin
@@ -19,34 +21,24 @@ if ($_SESSION['es_admin'] != 1) {
 // Conexión a la base de datos
 include 'bdcon.php';
 
-//funcion para eliminar los coches
-function matacoches($id){
-	$sql = "DELETE FROM coches WHERE id = $id";
-	//Importamos la variable global conn de fuera de la función a matacoches para usarla en la consulta sql
-        global $conn;
-	mysqli_query($conn, $sql);
-	return;
-}
-
 /*
--vale, el problema aqui es que desde el OnClick event de debajo no podemos lanzar funciones de python como el matacoches de aqui arriba porque como es un evento que se lee durante la ejecucion de la página solo acepta javascript
--entonces, mi idea de una solución, le metemos a la url la id que queremos borrar y creamos una funcion de php que si detecta ese id en la url, lanza matacoches y borra el id de la url
--es esto inseguro ? Muy seguramente, pero eh, eso es un problema para los nosotros del futuro
+-el futuro ha llegado, y hay que corregir la inseguridad de usar la url para pasar información
+-a traves de jquerys nos comunicamos con eliminar_coche.php que ya existe, asi todo es seguro y no metemos ningun dato en la url
 */
 
-//lo que revisa la url en busca del id
-if (isset($_GET['br'])) {
-    matacoches($_GET['br']);
-    //esto resetea la url
-    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?') . "?eliminado=1");
-    exit();
-}
-
-// Consultar todos los coches con datos del propietario
-$sql = "SELECT c.id, c.matricula, c.marca, c.modelo, c.color, c.kilometraje, c.precio, u.username AS propietario
+// Consultar todos los coches del sistema (Una de las pocas consultas del sistema donde no hay parametros que insertar)
+try{
+    $sql = "SELECT c.id, c.matricula, c.marca, c.modelo, c.color, c.kilometraje, c.precio, u.username AS propietario
         FROM coches c
         INNER JOIN usuarios u ON c.id_propietario = u.id";
-$result = mysqli_query($conn, $sql);
+	$stmt = $conn->prepare($sql);
+	$stmt->execute();
+	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	
+}catch (PDOException $e) {
+		echo "<p>Error al coger todos los coches: " . htmlspecialchars($e->getMessage()) . "</p>";
+		exit();
+} 
 
 // Mostrar los coches
 ?>
@@ -58,6 +50,15 @@ $result = mysqli_query($conn, $sql);
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/style.css">
 </head>
+
+<!-- popup confirmación -->
+<div id="popup-confirmacion-admin">
+	<h2  id="texto-confirmacion-admin" >¿Admin seguro de que quieres eliminar el coche?</h2>
+	<p>Esta acción no se puede deshacer.</p>
+	<button class="boton-popup" id="boton-confirmar-eliminacion" onclick="document.getElementById('popup-confirmacion-admin').style.display='none'">Si</button>
+	<button class="boton-popup" onclick="document.getElementById('popup-confirmacion-admin').style.display='none'">No</button>
+</div>
+
 <body>
     <header style="background-color: #c71435;">
         <div class="header-container">
@@ -82,7 +83,7 @@ $result = mysqli_query($conn, $sql);
             }
 
             // Verificar si la consulta fue exitosa y tiene resultados
-            if (mysqli_num_rows($result) > 0) {
+            if ($result) {
                 echo "<table border='1' cellpadding='8' cellspacing='0'>";
                 echo "<tr>
                         <th>ID</th>
@@ -96,7 +97,7 @@ $result = mysqli_query($conn, $sql);
                         <th>Acción</th>
                     </tr>";
 
-                while ($row = mysqli_fetch_assoc($result)) {
+               foreach($result as $row) {
                     echo "<tr>";
                     echo "<td>" . $row['id'] . "</td>";
                     echo "<td>" . htmlspecialchars($row['matricula']) . "</td>";
@@ -106,9 +107,8 @@ $result = mysqli_query($conn, $sql);
                     echo "<td>" . number_format($row['kilometraje']) . " km</td>";
                     echo "<td>€" . number_format($row['precio'], 2) . "</td>";
                     echo "<td>" . htmlspecialchars($row['propietario']) . "</td>";
-                    //vale, en esta parte metemos br=id en la url para notificar al codigo de php que tiene que empezar a borrar, y si, br el nombre al que asociamos el id, que es un stand in para borra, necesita el ?
-                    //lo verdaderamente jodido es que para que funcione bien, hay que concatenar todo cutre, dividiendo la cadena de caracteres en dos, para unir el eliminar y el id porque si pones href='?eliminar_id=$row['id']' se liaría con las comillas el compilador
-                    echo "<td><a href='?br=" . $row['id'] . "' onclick=\"return confirm('¿Seguro que deseas eliminar este coche?');\">Eliminar</a></td>";
+                    //Como le vamos a meter un onClick en javaScript, no hace falta que aquí tenga nada de eso
+                    echo "<td><a class='catalogo-admins-eliminar'>Eliminar</a></td>";
                     echo "</tr>";
                 }
 
@@ -117,8 +117,7 @@ $result = mysqli_query($conn, $sql);
                 echo "No hay coches registrados en el catálogo.";
             }
             
-            // Cerrar la conexión
-            mysqli_close($conn);
+            // No hace falta cerrar la conexión
         ?>
     </main>
     <footer>
@@ -126,3 +125,60 @@ $result = mysqli_query($conn, $sql);
     </footer>
     </body>
 </html>
+
+<!-- esto de aquí no es un script, es un link a la libreria de las Jqueris que le permite al java script de esta página utilizarla-->
+<script src="../js/jquery-3.5.1.min.js"></script>
+
+<!-- a continuación, el codigo de los onClick event de eliminar-->
+<script>
+//esto permite que funcionen las jqeries
+$(document).ready(function () {
+ 
+ //esta variable existe para recordar el id del coche selecionado previamente, por eso esta fuera de todas las funciones, para que todas la puedan leer y utilizar
+ let idSeleccionado = '';
+ 
+ //-----------------------------------------------------------------------------
+ //funcion1: ONCLICK ELIMINAR
+  $('.catalogo-admins-eliminar').on('click', function () {
+	//Con el 'this seleccionamos el eelemento más cercano al que se ha clicado del tipo tr, y luego buscamos el primer td que debería de tener el id'
+	idSeleccionado = $(this).closest('tr').find('td').eq(0).text()
+	//cambiamos texto del mensaje 
+	document.getElementById('texto-confirmacion-admin').innerText =`¿Admin seguro de que quieres eliminar el coche de matricula ${$(this).closest('tr').find('td').eq(1).text()} ?`;
+	//hacemos la ventana pop-up visible
+    document.getElementById('popup-confirmacion-admin').style.display = 'block';
+  });
+  //-----------------------------------------------------------------------------
+  
+ //-----------------------------------------------------------------------------
+ //funcion2:ONCLICK BOTON DEL POPUP QUE CONFIRMA ELIMINAR
+ $('#boton-confirmar-eliminacion').on('click', function () {
+	//si se clica en confirmar-eliminacion, suponemos que ya tenemos un valor en idSleccionado del paso anterior, pero aun así revisamos que el valor sea valido por se acaso 
+	if (idSeleccionado == null) {
+          console.error('No hay coche seleccionado para eliminar.');
+          return;
+      }
+	//enviamos el jqery y esperamos respuesta
+	$.post('eliminar_coche.php', { id: idSeleccionado })
+		.done(function (data) {
+			//parseamos respuesta
+			data = JSON.parse(data);
+			//Revisamos la respueta
+            if (data.esta=== 'ok') {
+				console.error('Coche eliminado con exito.');
+				//para recargar la página y que se vea el coche borrado
+				location.reload();
+		    } else {
+				console.error('Algo extraño acaba de pasar, y esto es lo que devuelve el servidor: ', data);
+			}
+			})
+		.fail(function (jqXHR, textStatus, errorThrown) {
+				console.error('Error en la conexion de eliminar_coches:', textStatus, errorThrown);
+		});
+ });
+ //-----------------------------------------------------------------------------
+ 
+ //Ejecucion de la pagina
+ //(Aqui no hay nada porque no hay nada que se ejecute nada más lanzar la página, sino que esperamos siempre a clicks)
+
+})
+</script>

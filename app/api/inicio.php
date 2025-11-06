@@ -1,12 +1,14 @@
 <?php
-ini_set('session.cookie_httponly', 1)
-ini_set('session.cookie_secure', 1)
-ini_set('session.use_only_cookies', 1)
+
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);  
+ini_set('session.use_only_cookies', 1); 
+
 session_start();
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -27,12 +29,9 @@ $admin_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007
 $img_admin = $es_admin ? '/media/admin.png' : '/media/a.png';
 $demanda = $es_admin ? 'Si estás viendo esto y no trabajas para nosotros, prepárate para una demanda.' : '';
 
-// Conexión a la base de datos
+// Conexión a la base de datos (Aun que no se usa)
 include 'bdcon.php';
 
-if (!$conn) {
-    die("<div class='alert alert-error'>Conexión fallida: " . mysqli_connect_error() . "</div>");
-}
 ?>
 
 <!DOCTYPE html>

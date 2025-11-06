@@ -1,95 +1,25 @@
 <?php
 
-ini_set('session.cookie_httponly', 1)
-ini_set('session.cookie_secure', 1)
-ini_set('session.use_only_cookies', 1)
+//esto de aquí regula aspetos de las cookies de sesión (son configuraciones internas que php le aplicaráa todas las cookies de sesión que genere)
+ini_set('session.cookie_httponly', 1); // <- pone 'httponly' a true para las cookies de sesión
+ini_set('session.cookie_secure', 1);  // <- pone 'secure' a true para las cookies de sesión (No se cuanto sentido tiene hacerlo para nuestro sistema cuando esto solo se aplica a paginas con certificado https)
+ini_set('session.use_only_cookies', 1);  // <- impide que php guarde el id de sesion por la url y le fuerza a guardarlo en cookies (Que son más seguras)
+
+//esto ahora se que hace, si no tienes esto, no puedes acceder a las variables de sesión y entonces te va a saltar el "if (!isset($_SESSION['user_id']))"
 session_start();
+
 
 // Verificar si el usuario está logueado, y le lleva a loguearse si no
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../index.php");
     exit();
 }
 
-// Literalmente llama a la conexion de la base de datos
+// Literalmente llama a la conexion de la base de datos (Aun que no se usa en esta hoja)
 include 'bdcon.php';
 
-if (!$conn) {
-    die("<div class='alert alert-error'>Conexión fallida: " . mysqli_connect_error() . "</div>");
-}
+
 ?>
-
-<style>
-/* CSS del boton comprar (esta en la propia pagina porque en el archivo general de css no funcionaba por alguna razón) */
-#btn-comprar {
-  background: #27ae60;
-  color: white;
-  padding: 24px 48px;
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-  display: none;
-
-  position: absolute;
-  right: 20px;  
-  bottom: 30px;
-}
-#btn-comprar:hover {
-  background: #219a52;
-  text-decoration: none;
-  color: white;
-}
-/*esta clase de CSS se la aplicamos a la fila que selecciona el usuario para remarcar que es la que tiene seleccionada*/
-.fila-selec {
-    background-color: #a5d6a7;
-}
-/*estilo de la ventana de éxito en la transacción*/
-#popup-exito{
-	display: none; 
-	z-index: 1000; 
-	background: white; 
-	border: 2px solid #2196F3; 
-	padding: 20px; 
-	top: 30%; 
-	left: 30%; 
-	width: 40%;
-	
-	position: fixed; 
-}
-/*estilo de la ventana de fallo en la transacción*/
-#popup-fallo{
-	display: none;  
-	z-index: 1000; 
-	background: white; 
-	border: 2px solid red; 
-	padding: 20px; 
-	top: 30%; 
-	left: 30%; 
-	width: 40%;
-	
-	position: fixed;
-}
-/*estilo de los botones de las bentanas popup*/
-.boton-popup{
-	background: #2196F3; 
-	color: white; 
-	padding: 10px; 
-	margin-right: 10px;	
-} 
-/* CSS de lo que esperemos nunca haya de ver un usuario XD */
-#error-no-car {
-  display: none;
-}
-.sowy {
-  background: #dcb7c4;
-  color: white;
-  padding: 12px 24px;
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-  display: inline-block;
-}
-</style>
 
 <!DOCTYPE html>
 <html>
@@ -107,7 +37,7 @@ if (!$conn) {
 	<p>Nos honra que haya decidido usar nuestro mercado de coches abierto a los usuarios</p>
 	<p>esperamos disfrute de su nuevo vehiculo y que vuelva a comprar con nosotros pronto.</p>
     <button class="boton-popup" onclick="window.location.href='mis_coches.php'">Ver mi inventario</button>
-    <button class="boton-popup" onclick="document.getElementById('popup-exito').style.display='none'">Seguir comprando</button>
+    <button class="boton-popup" id="seguir-comprando" onclick="document.getElementById('popup-exito').style.display='none'">Seguir comprando</button>
 </div>
 <!-- popup pobre -->
 <div id="popup-fallo">
@@ -144,10 +74,11 @@ if (!$conn) {
                     <select name="order_select" id="order_select">
                         <option value="modelo">Modelo</option>
                         <option value="marca">Marca</option>
-						<option value="color">Color</option>
 						<option value="kilometraje">Kilometraje</option>
-						<option value="precio">Precio</option>
+						<option value="color">Color</option>
 						<option value="vendedor">Vendedor</option>
+						<option value="matricula">Matricula</option>
+						<option value="precio">Precio</option>
                         <!-- valores posibles: marca,color,kilometraje,precio *IMPORTANTE QUE ESTEN ESCRITOS ASI, SI NO PETA TODO* -->
                     </select>
                 </div>
@@ -185,6 +116,7 @@ if (!$conn) {
 	<footer>
         	<a href="https://github.com/AitanaNB/Desarrollo-Web-SGSSI">Nuestro maravilloso y organizado código está disponible en Github</a>
 	</footer>
+	
 </body>
 </html>
 
@@ -206,12 +138,23 @@ $(document).ready(function () {
   function cargarCoches () {
         console.log('Iniciando carga de coches...');
         
-        //lanzamos el script coge-coches, le pasamos la variable order como orden, en caso de no haber seleccionado aun un valor, se ordena en función de modelo, y nos preparamos para leer el encode con la respuesta
-        //Nota actualizda, no, yo tenia razon al principio, se hacen las rutas desde la posicion relativa del documento en que se esta, como catalogo y coge-coches estan los dos en api no hace falta especificar la ruta desde index, solo se pone el nombre del documento 
+        //lanzamos el script coge-coches desde la posicion relativa del documento en que se esta, como catalogo y coge-coches estan los dos en api no hace falta especificar la ruta desde index, solo se pone el nombre del documento 
 		var order = document.getElementById('order_select').value ?? 'modelo';
-        $.getJSON('coge-coches.php', { orden: order })
+        $.post('coge-coches.php', { orden: order })
           .done(function (data) {
-              console.log('Respuesta recibida:', data);
+              /*IMPORTANTE
+			  
+				Aqui, esto se solia hacer con Jquerys con el metodo .getJSON()
+				Sin embargo, me di cuenta de que usaba la URL para pasar y recibir la información, a si que lo sustituí por el metodo .post(), que sintactica y funcionalmente es igual pero utiliza el metodo POST para pasar la inormación
+				-POST consiste meter las variables en un mensaje http, es un metodo Jquery a si que seguimos necesitando la librería
+				-Tambien nos obliga a que en los backends, las variables ya no se cogen con $_GET['variable_ejemplo'] sino con $_POST['variable_elemplo']
+				-Y a demas, lo siguiente es MUY IMPORTANTE para la funcion de debajo de esta y me ha llevado un monton de tiempo,sudor y lagrimas descubrir:
+				--Asume que lo que le devuelves es un objeto del tipo string, no array, que es como son los JSON por defecto
+				--Esto es importante aqui porque en las dos funciones que lo hacen, no leer bien el JSON es un error crítico (en una no se identificaría bien que pop-up lanzar, en la otra no se podria leer bien los coches que se cargan en la tabla)
+				-pues utilizamos 'JSON.parse(data);' para convertir data de un objeto string a un objeto como son los JSON, array 
+			  */
+			  console.log('Respuesta recibida:', data);
+			  data = JSON.parse(data);
 			  if (!data || !Array.isArray(data) || !data.length) {
                   console.log('No hay rutas o data no se ha formado bien');
 				  //muestra horrores más grandes que la imaginación del usuario ("horrors beyod the users comprehension")
@@ -312,7 +255,7 @@ $(document).ready(function () {
     }
 	
 	//lanzamos el script de php y esperamos el encode de respuesta 
-    $.getJSON('compra-coches.php', { matricula: matriculaSeleccionada })
+    $.post('compra-coches.php', { matricula: matriculaSeleccionada })
         //Como con el de caegarCoches, con esto cogemos los errores
 		.done(function (data) {
             if (data.resultado=== 'rico') {
@@ -329,7 +272,11 @@ $(document).ready(function () {
         .fail(function (jqXHR, textStatus, errorThrown) {
            console.error('Error en la conexion de comprar-coches:', textStatus, errorThrown);
         });
-});
-  
+   });
+   //cada vez que se le de a seguir comprando (en el pop up)
+  $('#seguir-comprando').on('click', function () {
+	//Recargar la página y que se vea que ha cambiado el catalogo de coches
+	location.reload();
+  });
 })
 </script>

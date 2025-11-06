@@ -1,7 +1,9 @@
 <?php
-ini_set('session.cookie_httponly', 1)
-ini_set('session.cookie_secure', 1)
-ini_set('session.use_only_cookies', 1)
+
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
+
 session_start();
 
 // Verificar si el usuario está logueado
@@ -13,11 +15,7 @@ if (!isset($_SESSION['user_id'])) {
 // Conexión a la base de datos
 include 'bdcon.php';
 
-if (!$conn) {
-    die("<div class='alert alert-error'>Conexión fallida: " . mysqli_connect_error() . "</div>");
-}
-
-// Procesar el formulario de subida de coche
+// Procesar el formulario de subida de coche (Cuando se clica en el boton de subir un coche)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Recibir datos del formulario
     $matricula = $_POST['matricula'];
@@ -32,23 +30,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($matricula) || empty($modelo) || empty($marca) || empty($color) || empty($kilometraje) || empty($precio)) {
         $mensaje = "<div class='alert alert-error'>Todos los campos son obligatorios.</div>";
     } else {
-        // verificar si la matrícula ya existe
-        $check_sql = "SELECT id FROM coches WHERE matricula = '$matricula'";
-        $check_result = $conn->query($check_sql);
-
-        if ($check_result->num_rows > 0) {
-            $mensaje = "<div class='alert alert-error'>Error: Ya existe otro coche con esa matrícula.</div>";
-        } else {
-            $sql = "INSERT INTO coches (matricula, modelo, marca, color, kilometraje, precio, en_venta, id_propietario)
-                    VALUES ('$matricula', '$modelo', '$marca', '$color', $kilometraje, $precio, $en_venta, $id_propietario)";
-
-            if (mysqli_query($conn, $sql)) {
-                echo "Coche subido con éxito";
-            } else {
-                echo "Error: " . $conn->error;
-            }
-        }
-    }
+		
+		try{
+			// verificar si la matrícula ya existe
+			$check_sql = "SELECT id FROM coches WHERE matricula = :matricula";
+			$params = [':matricula' => $matricula];
+			$stmt = $conn->prepare($check_sql);
+			$stmt->execute($params);
+			$check_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+			//si el resultado es (O mejor dicho, la variable no vale 0) eso quiere decir que ya existe, no lo volvemos a insertar
+			if ($check_result) {
+				$mensaje = "<div class='alert alert-error'>Error: Ya existe otro coche con esa matrícula.</div>";
+			//si no existe, lo insertamos
+			} else {
+				$conn->beginTransaction();
+				
+				$sql = "INSERT INTO coches (matricula, modelo, marca, color, kilometraje, precio, en_venta, id_propietario)
+						VALUES ( :matricula, :modelo, :marca, :color, :kilometraje, :precio, :en_venta, :id_propietario )";
+				$params = [':matricula' => $matricula,':modelo' => $modelo,':marca' => $marca,':color' => $color,':kilometraje' => $kilometraje,':precio' => $precio,':en_venta' => $en_venta,':id_propietario' => $id_propietario];
+				$stmt = $conn->prepare($sql);
+				$stmt->execute($params);
+				$conn->commit();
+				
+				//Si se llega aquí 
+				echo "Coche subido con éxito";
+			}	
+		}catch (PDOException $e) {
+            echo "<div class='alert alert-error'>Error en la consulta de subir el coche: ". htmlspecialchars($e->getMessage()) .  "</div>";
+		}
+	}
 
     
 }

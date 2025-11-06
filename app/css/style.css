@@ -1,3 +1,13 @@
+/*
+  Dato gracioso:
+    A veces cuando editas una hoja de estilo como esta y recargas la página el navegador no es capaz de mostrar el nuevo estilo que has añadido a un componente
+    Esto a pesar de que tu podrias jurar y prejurar que no has hecho nada mal, que tu código es funcional
+    Y es que en efecto, que tu código este bien no tiene que ver nada para que aun así falle 
+    resulta que el cache visual de las páginas los navegadores no lo recargan lo amenudo que debería 
+    y entonces aun que tu código este bien, como el css no esta en la página, no estas forzando a Google a recargarlo y en consecuencia no te muestra los cambios
+    eso si, google tiene un shortcut que te permite obligarle a recargar la memoria de la página, Ctrl + Shift + R
+A   Que maravillosa empresa que es Google y que buenos que son sus productos >:|
+*/
 body {
     /*font-family: Arial, sans-serif;*/
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -141,3 +151,136 @@ footer {
   text-decoration: none;
   color: white;
 }
+
+/*-------------------- CSS de estilo de catalogo.php -------------------------*/
+
+/* CSS del boton comprar (esta en la propia pagina porque en el archivo general de css no funcionaba por alguna razón) */
+#btn-comprar {
+  background: #27ae60;
+  color: white;
+  padding: 24px 48px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  display: none;
+
+  position: absolute;
+  right: 20px;  
+  bottom: 30px;
+}
+#btn-comprar:hover {
+  background: #219a52;
+  text-decoration: none;
+  color: white;
+}
+/*esta clase de CSS se la aplicamos a la fila que selecciona el usuario para remarcar que es la que tiene seleccionada*/
+.fila-selec {
+    background-color: #a5d6a7;
+}
+/*estilo de la ventana de éxito en la transacción*/
+#popup-exito{
+	display: none; 
+	z-index: 1000; 
+	background: white; 
+	border: 2px solid #2196F3; 
+	padding: 20px; 
+	top: 30%; 
+	left: 30%; 
+	width: 40%;
+	
+	position: fixed; 
+}
+/*estilo de la ventana de fallo en la transacción*/
+#popup-fallo{
+	display: none;  
+	z-index: 1000; 
+	background: white; 
+	border: 2px solid red; 
+	padding: 20px; 
+	top: 30%; 
+	left: 30%; 
+	width: 40%;
+	
+	position: fixed;
+}
+/*estilo de los botones de las bentanas popup (Tambien usado por mis_coches , catalogoCocheAdmin y catalogoCuentaAdmin)*/
+.boton-popup{
+	background: #2196F3; 
+	color: white; 
+	padding: 10px; 
+	margin-right: 10px;	
+} 
+/* CSS de lo que esperemos nunca haya de ver un usuario XD */
+#error-no-car {
+  display: none;
+}
+.sowy {
+  background: #dcb7c4;
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/*-------------------------------------------------------------------------------------*/
+
+
+
+/*-------------------- CSS de estilo de mis_coches -------------------------*/
+
+/*estilo de la ventana popup*/
+#popup-confirmacion{ 
+	display: none; 
+	z-index: 1000; 
+	background: white; 
+	border: 2px solid #2196F3; 
+	padding: 20px; 
+	top: 30%; 
+	left: 30%; 
+	width: 40%; 
+	position: fixed; 
+	
+	/*Aqui he intentado jugar un poco con como se ve, no noto mucha diferencia la verdad ¿Que opinais?*/
+	font-family: 'Helvetica Neue', Arial, sans-serif;
+	font-size: 14px;     
+	font-weight: normal;       
+	line-height: 1.4;     
+}
+
+/*-----------------------------------------------------------------------------------------*/
+
+
+
+/*-------------------- CSS de estilo de catalogoCocheAdmin y catalogoCuentaAdmin -------------------------*/
+
+/*Esto destaca un poco el boton de eliminar para que se note que es clicable*/
+.catalogo-admins-eliminar {
+    color: #0000EE;        
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.catalogo-admins-eliminar:hover {
+    color: #551A8B;     
+}
+
+/*estilo de la ventana popup para admins*/
+#popup-confirmacion-admin{ 
+	display: none; 
+	z-index: 1000; 
+	background: white; 
+	border: 2px solid red; 
+	padding: 20px; 
+	top: 30%; 
+	left: 30%; 
+	width: 40%; 
+	position: fixed; 
+	
+	font-family: 'Helvetica Neue', Arial, sans-serif;
+	font-size: 14px;     
+	font-weight: normal;       
+	line-height: 1.4;     
+}
+

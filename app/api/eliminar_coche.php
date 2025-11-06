@@ -1,7 +1,9 @@
 <?php
-ini_set('session.cookie_httponly', 1)
-ini_set('session.cookie_secure', 1)
-ini_set('session.use_only_cookies', 1)
+
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1); 
+ini_set('session.use_only_cookies', 1); 
+
 session_start();
 
 // Verificar si el usuario está logueado
@@ -13,26 +15,29 @@ if (!isset($_SESSION['user_id'])) {
 // Conexión a la base de datos
 include 'bdcon.php';
 
-if (!$conn) {
-    die("<div class='alert alert-error'>Conexión fallida: " . mysqli_connect_error() . "</div>");
-}
+// Obtenemos Jqery 
+$coche_id = $_POST['id'];
 
 // Procesar la eliminación del coche
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_coche'])) {
-    // Obtener ID del coche a eliminar
-    $coche_id = $_POST['id_coche'];
-    $user_id = $_SESSION['user_id'];
-    $sql="DELETE FROM coches WHERE id = $coche_id AND id_propietario = $user_id";
+try{
+	$conn->beginTransaction();
+	
+    $sql="DELETE FROM coches WHERE id = :coche_id";
+    //Borrar solo los coches del usuario actual nos impide reutilizar la fución para catalogoCochesAdmin.php y a demás tampoco es tan necesario (Sería dificil que el usuario llame a esta hoja para un id de un coche que no sea suyo si todas las llamdas se hacen con ids de coches de la tabla mis coches)
+	$params = [':coche_id' => $coche_id];
+	$stmt = $conn->prepare($sql);
+	$stmt->execute($params);
+	$conn->commit();
+	//avisamos que todo ha ido bien
+	echo json_encode(['esta' => 'ok']);
+    //No hace falta hacer header ni nada porque no entramos teoricmente a esta página (El usuario se ha quedado en la otra esperando el resultado de la jquery)
     
-    if (mysqli_query($conn, $sql)) {
-        header("Location: mis_coches.php");
-        exit();
-    } else {
-        echo "Error al eliminar el coche.";
-    }
-}
+}catch (PDOException $e) {
+		if ($conn->inTransaction()) $conn->rollBack();
+		//enviamos el error que ha dado
+		echo json_encode(['esta' => htmlspecialchars($e->getMessage())]);
+} 
 
-// Cerrar la conexión
-$conn->close();
+// Cerrar la conexión no es necesario
 ?>
 

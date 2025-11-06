@@ -1,19 +1,44 @@
 <?php
 
+ini_set('session.cookie_httponly', 1); 
+ini_set('session.cookie_secure', 1);  
+ini_set('session.use_only_cookies', 1); 
+
+//esto ahora se que hace, si no tienes esto, no puedes acceder a las variables de sesión y entonces te va a saltar el "if (!isset($_SESSION['user_id']))"
+session_start();
+
 // LLamada a la conexion de la base de datos 
 include 'bdcon.php';
 
-//Aqui quería haber ido de guays y haber definido una conexion PDO con las variables de bdcon, pero la imagen de apache-docker que corremos no tiene PDO instalado por defecto, y meterle la librería requeriría cambiar el yml y no creo que ninguno queramos pasar por eso
-//Aun que diré, PDO es más seguro que mysqli y tiene algunas funciones predefinidas para hacer cosas más rápido
+//Que no se cuele un usuario por aquí
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../index.php");
+    exit();
+}
 
-// Cogemos en funcion de que quiere el usuario que ordenemos los coches. En caso de error ordenamos según  
-$orden = $_GET['orden'] ?? 'modelo'; // Por defecto ordenamos en funcion del modelo
-/* Creo que es un poco superfluo trar el caso null, porque si el encode valía null en la página de donde se hace el llamamiemto nunca se siquiera lanza la 
-Jquery y por eso si la variable vale null en catalogo.php ya le cambio el valor, pero nadie se a muerto por ser cuidadoso*/ 
+//Aqui solia haber un comentario sobre como es mejor usar PDO, Usamos PDO ahora, YaY :D
 
-//consulta de SQL donde de coogen los coches QUE ESTAN EN VENTA	
-$sql = "
-SELECT
+//El tipico try
+try{
+
+	// Cogemos en funcion de que quiere el usuario que ordenemos los coches. En caso de error ordenamos según  
+	$orden = $_POST['orden'] ?? 'modelo'; // Por defecto ordenamos en funcion del modelo
+	// Esta comprobación es un poco superflua (El caso null ya se trata en catalogo.php) pero nadie se a muerto por ser cuidadoso
+	
+	/*
+	Tengo malas noticias, ORDER BY no admite meterle variables como :variable por limitaciones de MYSQL, ni siquiera en PDO. A si que hay que hacer la inserción ($orden)
+	-Pero hay una solucion, revisamos que el valor que vamos a meter en el código tenga solo un valor concreto entre unos pocos (Sea un campo entre los que se pueda añadir), y así al menos no nos pueden meter código que rompa la consulta (Aun que si que pueden meter otro campo por el que ordenar los coches, pero bueno, ningun software es perfecto)
+	--¿Podríamos haber utilizado esta filosofía para proteger el resto del código y mantener las insercuines?
+	--- Quiza, pero es peor que usar PDO porque 1. La inyección sigue siendo posible, con esto solo aseguramos que el valor sea uno que no pete todo (Y que la inserción siga siendo posible podría ser peligroso para una hoja como borrar-coches.php) 2. Ponte a especificar casos posibles en una variable que tenga ids de los coches de la aplicación, es mejor no tener que hacer la comprobacoión
+	*/
+	if(!in_array($orden,array('modelo','marca','color','kilometraje','precio','matricula','vendedor'))){
+		$orden = 'modelo';
+	}
+	
+	
+	//consulta de SQL donde de cogen los coches QUE ESTAN EN VENTA	
+	$sql = "
+	SELECT
     	c.modelo,
     	c.marca,
     	c.kilometraje,
@@ -22,22 +47,21 @@ SELECT
     	c.matricula,
     	c.precio
 
-FROM coches c
-LEFT JOIN usuarios u ON u.id  = c.id_propietario
-WHERE c.en_venta = '1'
-ORDER BY $orden
-";
-//el motor no me deja hacer ORDER BY :orden y luego inyectar el valor con $params = [':orden' => $orden]; y luego $stmt->execute($params); por alguna razon, pero aún que sea menos seguro, tambien se puede insertar la variable como esta arriba, directamente en el codigo
+	FROM coches c
+	LEFT JOIN usuarios u ON u.id  = c.id_propietario
+	WHERE c.en_venta = '1'
+	ORDER BY $orden
+	";
+	$stmt = $conn->prepare($sql);
+    $stmt->execute();
+	//De no usar PDO tendríamos que hacer $stmt = mysqli_query($conn, $sql); $coches = []; while ($row = $stmt->fetch_assoc()) {$coches[] = $row;} , sin duda, un codigo mucho menos civilizado :p
+	$coches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-//lanzamos las query
-//Con PDO pudiesemos solo haber hecho solo $result = $conn->prepare($sql); $result->execute(); $coches = $result->fetchAll(PDO::FETCH_ASSOC); en lugar de todo esto :,c 
-$result = mysqli_query($conn, $sql);
-$coches = [];
-while ($row = $result->fetch_assoc()) {
-    $coches[] = $row;
-}
-
-//enviamos el encode
+	//enviamos el encode
 	echo json_encode($coches);
 	exit;
+	
+} catch (PDOException $e) {
+    echo "<h3>Error: " . htmlspecialchars($e->getMessage()) . "</h3>";
+}
 ?>
