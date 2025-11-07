@@ -25,9 +25,6 @@ if (version_compare(PHP_VERSION, '7.3.0', '<')) {
 }
 
 // Content-Security-Policy (CSP)
-/* Nota: Se requiere 'unsafe-inline' y 'unsafe-eval' para que el código actual funcione
-debido al uso de JavaScript/CSS en línea y jQuery. Para una solución completa, 
-se debe migrar el código en línea a archivos externos o usar Nonces/Hashes. */
 $csp_policy = "default-src 'self'; ";
 $csp_policy .= "script-src 'self' 'unsafe-inline'; "; 
 $csp_policy .= "style-src 'self' 'unsafe-inline'; ";

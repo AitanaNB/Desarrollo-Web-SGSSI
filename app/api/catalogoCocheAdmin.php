@@ -7,9 +7,6 @@ ini_set('session.use_only_cookies', 1);
 session_start();
 
 // Content-Security-Policy (CSP)
-/* Nota: Se requiere 'unsafe-inline' y 'unsafe-eval' para que el código actual funcione
-debido al uso de JavaScript/CSS en línea y jQuery. Para una solución completa, 
-se debe migrar el código en línea a archivos externos o usar Nonces/Hashes. */
 $csp_policy = "default-src 'self'; ";
 $csp_policy .= "script-src 'self';"; 
 $csp_policy .= "style-src 'self'; ";
