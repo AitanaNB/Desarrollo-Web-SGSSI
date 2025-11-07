@@ -64,7 +64,6 @@ try{
 		$orden = 'modelo';
 	}
 	
-	
 	//consulta de SQL donde de cogen los coches QUE ESTAN EN VENTA	
 	$sql = "
 	SELECT
