@@ -40,11 +40,24 @@ header("Content-Security-Policy: " . $csp_policy);
 include 'bdcon.php';
 
 // Error genérico
-$error_generico = "<h3>Error al iniciar sesión</h3>
+$error_generico = "<!DOCTYPE html>
+						<html lang='es'>
+						<head>
+							<meta charset='UTF-8'>
+							<title>COMPRAMOS TU COCHE</title>
+							<link rel='stylesheet' href='/css/style.css'>
+						</head>
+						<body class='body-errorConAURA'>
+							<h3>Error al iniciar sesión</h3>
+							<p>Usuario o contraseña incorrectos.</p>
+							<a href='../index.php'  class='boton-errorConAURA'>Volver al inicio</a>
+						</body>
+						</html>";
+						/*"<h3>Error al iniciar sesión</h3>
 								<p>Usuario o contraseña incorrectos.</p>
-								<a href='../index.php' style='display: inline-block; padding: 10px
-								15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al inicio</a>
+								<a href='../index.php'  <link rel='stylesheet' href='/css/style.css'>'>Volver al inicio</a>
 								</div>";
+						*/
 
 /*
  En lugar de hacer un if($conn), metemos toda la operacion en un try catch, y dejamos que el gestor de errores de PDO se ecarge de ello:

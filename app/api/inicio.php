@@ -98,7 +98,7 @@ include 'bdcon.php';
                     <a href="<?php echo $cuentas_destino ; ?>" class="boton <?php echo $admin_color_class; ?>"><?php echo $texto_cuentas; ?></a>
                 </div>
 				<img src="../media/joseba-carglass.png" width="300" height="200"/>
-                <p style="color:Tomato;"><?php echo $demanda; ?></p>
+                <p class="texto-demanda"><?php echo $demanda; ?></p>
     </nav>
     </main>
     

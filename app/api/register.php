@@ -43,7 +43,48 @@ if (!empty($session_id)) {
 
 // Conexión a la base de datos
 include 'bdcon.php'; // Este archivo debe definir: $conn
-
+$errorExisteDNI = "<!DOCTYPE html>
+						<html lang='es'>
+						<head>
+							<meta charset='UTF-8'>
+							<title>COMPRAMOS TU COCHE</title>
+							<link rel='stylesheet' href='/css/style.css'>
+						</head>
+						<body class='body-errorConAURA'>
+							<h3>Error en el registro</h3></h3>
+							<p>El DNI <strong>$dni</strong> ya está registrado en el sistema.</p>
+							<p>Por favor, verifica tus datos o utiliza un DNI diferente.</p>
+							<a href='../index.php'  class='boton-errorConAURA'>Volver al registro</a>
+						</body>
+		</html>";
+$errorExisteUsuario = "<!DOCTYPE html>
+						<html lang='es'>
+						<head>
+							<meta charset='UTF-8'>
+							<title>COMPRAMOS TU COCHE</title>
+							<link rel='stylesheet' href='/css/style.css'>
+						</head>
+						<body class='body-errorConAURA'>
+							<h3>Error en el registro</h3></h3>
+							<p>El nombre de usuario <strong>$username</strong> ya está registrado en el sistema.</p>
+							<p>Por favor, elige un nombre de usuario diferente.</p>
+							<a href='../index.php'  class='boton-errorConAURA'>Volver al registro</a>
+						</body>
+		</html>";
+$errorHash = "<!DOCTYPE html>
+						<html lang='es'>
+						<head>
+							<meta charset='UTF-8'>
+							<title>COMPRAMOS TU COCHE</title>
+							<link rel='stylesheet' href='/css/style.css'>
+						</head>
+						<body class='body-errorConAURA'>
+							<h3>Error en el registro</h3></h3>
+							<p>Lo sentimos usuario, no hemos conseguido generar bien el hash de su contraseña.</p>
+							<p>Por favor, pruebe más tarde con otra.</p>
+							<a href='../index.php'  class='boton-errorConAURA'>Volver al registro</a>
+						</body>
+		</html>";
 //try,catch por si no va la conexion
 try{
 	// Recibir datos del formulario
@@ -62,16 +103,12 @@ try{
 	$stmt = $conn->prepare($sql);
 	$stmt->execute($params);
 	$hay_DNI = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	
 	
 	if ($hay_DNI) {
 		// Si el DNI ya existe, mostrar mensaje de error
-		// Como os gusta poner </div> sin abrir contenedor eh, XD
-		echo "<div>";
-		echo "<h3>Error en el registro</h3>";
-		echo "<p>El DNI <strong>$dni</strong> ya está registrado en el sistema.</p>";
-		echo "<p>Por favor, verifica tus datos o utiliza un DNI diferente.</p>";
-		echo "<a href='../index.php' style='display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al registro</a>";
-		echo "</div>";
+		echo "$errorExisteDNI";
 		exit();
 	}
 
@@ -86,11 +123,7 @@ try{
 
 	if ($hay_usuario) {
 		// Si el username ya existe, mostrar mensaje de error
-		echo "<h3>Error en el registro</h3>";
-		echo "<p>El nombre de usuario <strong>$username</strong> ya está registrado en el sistema.</p>";
-		echo "<p>Por favor, elige un nombre de usuario diferente.</p>";
-		echo "<a href='../index.php' style='display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al registro</a>";
-		echo "</div>";
+		echo "$errorExisteUsuario";
 		exit();
 	}
 	
@@ -107,11 +140,7 @@ try{
 	
 	// No se ha creado bien el hash
 	if (!$password_hash) {
-        echo "<h3>Error en el registro</h3>";
-		echo "<p>Lo sentimos usuario, no hemos conseguido generar bien el hash de su contraseña.</p>";
-		echo "<p>Por favor, pruebe más tarde con otra.</p>";
-		echo "<a href='../index.php' style='display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;'>Volver al registro</a>";
-		echo "</div>";
+		echo "$errorHash";
 		exit();
     }
 	

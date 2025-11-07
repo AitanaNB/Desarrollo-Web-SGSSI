@@ -151,6 +151,28 @@ footer {
   text-decoration: none;
   color: white;
 }
+/*-------------------- CSS de estilo de inicio.php -------------------------*/
+.texto-demanda {
+   color: tomato;
+}
+
+/*-------------------- CSS de estilo de login.php y register.php-------------------------*/
+.body-errorConAURA{
+    font-family: 'Times New Roman', Times, serif;
+    text-align: left;
+    margin-left: 20px;  
+}
+.boton-errorConAURA{
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;           
+    max-width: fit-content;            
+}
+/*-------------------------------------------------------------------------------------*/
 
 /*-------------------- CSS de estilo de catalogo.php -------------------------*/
 
