@@ -96,21 +96,21 @@ try{
 	$nuevoSaldo = $saldo - $precio;
 
 	//le quitamos el dinero al comprador (le ponemos el valor del nuevo saldo)
-	$sql = "UPDATE usuarios SET dinero = $nuevoSaldo WHERE id = :idUser";
-	$params = [':idUser' => $idUser];
+	$sql = "UPDATE usuarios SET dinero = :nuevoSaldo WHERE id = :idUser";
+	$params = [':idUser' => $idUser,':nuevoSaldo' => $nuevoSaldo ];
 	$stmt = $conn->prepare($sql);
     $stmt->execute($params);
 	
 	//le añadimos dinero al vendedor (le sumamos el valor del precio)
-	$sql = "UPDATE usuarios SET dinero = dinero + $precio WHERE id = :idSeler";
-	$params = [':idSeler' => $idSeler];
+	$sql = "UPDATE usuarios SET dinero = dinero + :precio WHERE id = :idSeler";
+	$params = [':idSeler' => $idSeler, ':precio' => $precio];
 	$stmt = $conn->prepare($sql);
     $stmt->execute($params);
 
 	//actualizamos los datos del coche
 	//muy importante, por defecto si un valor de una variable al que llamas con $ empieza por numeros y no tiene '', pensará que es un numerico el codigo y habrá problemas. Hay que incluir las comillas en el nombre de la variable para asegurarnos de que el compilador sabe que hablamos de un varchar
-	$sql = "UPDATE coches SET id_propietario = $idUser, en_venta = 0 WHERE matricula = :matricula ";
-	$params = [':matricula' => $matricula];
+	$sql = "UPDATE coches SET id_propietario = :idUser, en_venta = 0 WHERE matricula = :matricula ";
+	$params = [':matricula' => $matricula, ':idUser' => $idUser];
 	$stmt = $conn->prepare($sql);
     $stmt->execute($params);
 
