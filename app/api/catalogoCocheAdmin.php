@@ -11,8 +11,8 @@ session_start();
 debido al uso de JavaScript/CSS en línea y jQuery. Para una solución completa, 
 se debe migrar el código en línea a archivos externos o usar Nonces/Hashes. */
 $csp_policy = "default-src 'self'; ";
-$csp_policy .= "script-src 'self' 'unsafe-inline';"; 
-$csp_policy .= "style-src 'self' 'unsafe-inline'; ";
+$csp_policy .= "script-src 'self';"; 
+$csp_policy .= "style-src 'self'; ";
 $csp_policy .= "img-src 'self' data:; "; 
 $csp_policy .= "frame-ancestors 'none';"; // Alternativa al X-Frame-Options
 
@@ -22,18 +22,16 @@ $csp_policy .= "form-action 'self'; ";
 header("Content-Security-Policy: " . $csp_policy);
 
 // Para PHP 7.2.2, configuramos SameSite manualmente
-if (version_compare(PHP_VERSION, '7.3.0', '<')) {
-    // Se obtiene información de la sesión actual
-    $session_name = session_name();
-    $session_id = session_id();
-    if (!empty($session_id)) {
-        $path = $current_params['path'];
-        $domain = $current_params['domain'];
-        $secure = $current_params['secure'] ? 'Secure;' : '';
-        // SameSite Attribute
-        // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
-        header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
-    }
+// Se obtiene información de la sesión actual
+$session_name = session_name();
+$session_id = session_id();
+if (!empty($session_id)) {
+    $path = $current_params['path'];
+    $domain = $current_params['domain'];
+    $secure = $current_params['secure'] ? 'Secure;' : '';
+    // SameSite Attribute
+    // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
+    header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
 }
 
 // Verificar que el usuario esté logueado y sea admin
@@ -85,12 +83,12 @@ try{
 <div id="popup-confirmacion-admin">
 	<h2  id="texto-confirmacion-admin" >¿Admin, seguro que quieres ELIMINAR el coche?</h2>
 	<p>Esta acción no se puede deshacer.</p>
-	<button class="boton-popup" id="boton-confirmar-eliminacion" onclick="document.getElementById('popup-confirmacion-admin').style.display='none'">Si</button>
-	<button class="boton-popup" onclick="document.getElementById('popup-confirmacion-admin').style.display='none'">No</button>
+	<button class="boton-popup" id="boton-confirmar-eliminacion" >Si</button>
+    <button class="boton-popup" id="boton-remordimientos">No</button>
 </div>
 
 <body>
-    <header style="background-color: #c71435;">
+    <header class="admin-header">
         <div class="header-container">
             <div>
                 <h1>Catálogo de Coches (Admin)</h1>

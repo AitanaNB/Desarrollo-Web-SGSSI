@@ -7,27 +7,22 @@ ini_set('session.use_only_cookies', 1);
 session_start();
 
 // Para PHP 7.2.2, configuramos SameSite manualmente
-if (version_compare(PHP_VERSION, '7.3.0', '<')) {
-    // Se obtiene información de la sesión actual
-    $session_name = session_name();
-    $session_id = session_id();
-    if (!empty($session_id)) {
-        $path = $current_params['path'];
-        $domain = $current_params['domain'];
-        $secure = $current_params['secure'] ? 'Secure;' : '';
-        // SameSite Attribute
-        // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
-        header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
-    }
+// Se obtiene información de la sesión actual
+$session_name = session_name();
+$session_id = session_id();
+if (!empty($session_id)) {
+    $path = $current_params['path'];
+    $domain = $current_params['domain'];
+    $secure = $current_params['secure'] ? 'Secure;' : '';
+    // SameSite Attribute
+    // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
+    header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
 }
 
 // Content-Security-Policy (CSP)
-/* Nota: Se requiere 'unsafe-inline' y 'unsafe-eval' para que el código actual funcione
-debido al uso de JavaScript/CSS en línea y jQuery. Para una solución completa, 
-se debe migrar el código en línea a archivos externos o usar Nonces/Hashes. */
 $csp_policy = "default-src 'self'; ";
-$csp_policy .= "script-src 'self' 'unsafe-inline'; "; 
-$csp_policy .= "style-src 'self' 'unsafe-inline'; ";
+$csp_policy .= "script-src 'self'; "; 
+$csp_policy .= "style-src 'self'; ";
 $csp_policy .= "img-src 'self' data:; "; 
 $csp_policy .= "frame-ancestors 'none';"; // Alternativa al X-Frame-Options
 
@@ -55,7 +50,11 @@ $texto_catalogo = $es_admin ? 'Catálogo Coches' : 'Catálogo de coches';
 $cuentas_destino = $es_admin ? 'catalogoCuentaAdmin.php' : 'mis_coches.php';
 $texto_cuentas = $es_admin ? 'Catálogo Cuentas' : 'Ver mis coches';
 $admin_title= $es_admin ? '- VISTA ADMINS' : '' ;
-$admin_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007bff;' ;
+if($es_admin == 1){
+    $admin_color_class = 'admin-header'; // NUEVO: Usamos la clase
+} else {
+    $admin_color_class = 'user-header'; // NUEVO: Usamos la clase
+}
 $img_admin = $es_admin ? '/media/admin.png' : '/media/a.png';
 $demanda = $es_admin ? 'Si estás viendo esto y no trabajas para nosotros, prepárate para una demanda.' : '';
 
@@ -74,7 +73,7 @@ include 'bdcon.php';
 </head>
 <body>
     
-     <header style="<?php echo $admin_color; ?>">
+     <header class="<?php echo $admin_color_class; ?>">
          <!-- Botón arriba a la derecha -->
          <a href="show_user.php" class="boton_Superior">  
         <img src="<?php echo $img_admin; ?>">
@@ -94,9 +93,9 @@ include 'bdcon.php';
                 <p>Explora el catálogo, revisa tus vehículos o accede a tu cuenta.</p>
                 
                 <div id="botones">
-                    <a href="<?php echo $catalogo_destino; ?>" class="boton" style="<?php echo $admin_color; ?>"><?php echo $texto_catalogo; ?></a>
+                    <a href="<?php echo $catalogo_destino; ?>" class="boton <?php echo $admin_color_class; ?>"><?php echo $texto_catalogo; ?></a>
                     <br>
-                    <a href="<?php echo $cuentas_destino ; ?>" class="boton" style="<?php echo $admin_color; ?>"><?php echo $texto_cuentas; ?></a>
+                    <a href="<?php echo $cuentas_destino ; ?>" class="boton <?php echo $admin_color_class; ?>"><?php echo $texto_cuentas; ?></a>
                 </div>
 				<img src="../media/joseba-carglass.png" width="300" height="200"/>
                 <p style="color:Tomato;"><?php echo $demanda; ?></p>

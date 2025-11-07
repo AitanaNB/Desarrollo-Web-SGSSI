@@ -19,6 +19,7 @@ $(document).ready(function () {
  //-----------------------------------------------------------------------------
  //funcion2:ONCLICK BOTON DEL POPUP QUE CONFIRMA ELIMINAR
  $('#boton-confirmar-eliminacion').on('click', function () {
+	document.getElementById('popup-confirmacion-admin').style.display = 'none'; 
 	//si se clica en confirmar-eliminacion, suponemos que ya tenemos un valor en idSleccionado del paso anterior, pero aun así revisamos que el valor sea valido por se acaso 
 	if (idSeleccionado == null) {
           console.error('No hay coche seleccionado para eliminar.');
@@ -40,6 +41,14 @@ $(document).ready(function () {
 				console.error('Error en la conexion de eliminar_coches:', textStatus, errorThrown);
 		});
  });
+
+ //funcion3:-----------------------------------------------------------------------------
+//ONCLICK NO ELIMINAR (usuario exibe remordimientos de matar al coche)
+$('#boton-remordimientos').on('click', function () {
+//apaga la el popup
+document.getElementById('popup-confirmacion-admin').style.display = 'none';
+});
+//-----------------------------------------------------------------------------
  //-----------------------------------------------------------------------------
  
  //Ejecucion de la pagina

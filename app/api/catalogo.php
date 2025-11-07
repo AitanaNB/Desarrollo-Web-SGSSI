@@ -19,19 +19,18 @@ $csp_policy .= "form-action 'self'; ";
 header("Content-Security-Policy: " . $csp_policy);
 
 // Para PHP 7.2.2, configuramos SameSite manualmente
-if (version_compare(PHP_VERSION, '7.3.0', '<')) {
-    // Se obtiene información de la sesión actual
-    $session_name = session_name();
-    $session_id = session_id();
-    if (!empty($session_id)) {
-        $path = $current_params['path'];
-        $domain = $current_params['domain'];
-        $secure = $current_params['secure'] ? 'Secure;' : '';
-        // SameSite Attribute
-        // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
-        header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
-    }
+// Se obtiene información de la sesión actual
+$session_name = session_name();
+$session_id = session_id();
+if (!empty($session_id)) {
+    $path = $current_params['path'];
+    $domain = $current_params['domain'];
+    $secure = $current_params['secure'] ? 'Secure;' : '';
+    // SameSite Attribute
+    // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
+    header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
 }
+
 
 
 // Verificar si el usuario está logueado, y le lleva a loguearse si no
@@ -68,7 +67,7 @@ include 'bdcon.php';
 <div id="popup-fallo">
     <h2>No tienes suficiente dinero para comprar este coche</h2>
     <p><?php echo htmlspecialchars($_SESSION['usuario']); ?>, vuélvelo a intentar cuando seas un poco más... rico.</p>
-    <img src="../media/Morshu.png" style="width:150px; height:auto; float:right; margin-top:-80px;"/>
+    <img src="../media/Morshu.png" class="morshu-image" alt="Morshu"/>
     <button class="boton-popup" id="oh">Oh :,c</button>
 </div>
 

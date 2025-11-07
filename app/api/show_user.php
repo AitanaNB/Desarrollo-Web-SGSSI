@@ -7,18 +7,16 @@ ini_set('session.use_only_cookies', 1);
 session_start();
 
 // Para PHP 7.2.2, configuramos SameSite manualmente
-if (version_compare(PHP_VERSION, '7.3.0', '<')) {
-    // Se obtiene información de la sesión actual
-    $session_name = session_name();
-    $session_id = session_id();
-    if (!empty($session_id)) {
-        $path = $current_params['path'];
-        $domain = $current_params['domain'];
-        $secure = $current_params['secure'] ? 'Secure;' : '';
-        // SameSite Attribute
-        // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
-        header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
-    }
+// Se obtiene información de la sesión actual
+$session_name = session_name();
+$session_id = session_id();
+if (!empty($session_id)) {
+    $path = $current_params['path'];
+    $domain = $current_params['domain'];
+    $secure = $current_params['secure'] ? 'Secure;' : '';
+    // SameSite Attribute
+    // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
+    header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
 }
 
 // Content-Security-Policy (CSP)
@@ -26,8 +24,8 @@ if (version_compare(PHP_VERSION, '7.3.0', '<')) {
 debido al uso de JavaScript/CSS en línea y jQuery. Para una solución completa, 
 se debe migrar el código en línea a archivos externos o usar Nonces/Hashes. */
 $csp_policy = "default-src 'self'; ";
-$csp_policy .= "script-src 'self' 'unsafe-inline'; "; 
-$csp_policy .= "style-src 'self' 'unsafe-inline'; ";
+$csp_policy .= "script-src 'self'; "; 
+$csp_policy .= "style-src 'self';";
 $csp_policy .= "img-src 'self' data:; "; 
 $csp_policy .= "frame-ancestors 'none';"; // Alternativa al X-Frame-Options
 
@@ -49,11 +47,17 @@ include 'bdcon.php';
 $es_admin = ($_SESSION['es_admin'] == 1);
 
 //Prepara las variables dinámicas
-$admin_color= $es_admin ? 'background-color: #c71435;' : 'background-color: #007bff;' ;
+if($es_admin == 1){
+    $admin_color_class = 'admin-header'; // NUEVO: Usamos la clase
+    $admin_sin_dinero = 'display: none;';
+} else {
+    $admin_color_class = 'user-header'; // NUEVO: Usamos la clase
+    $admin_sin_dinero = '';
+}
 $admin_title= $es_admin ? '- ADMIN SETTINGS' : '' ;
 
 //Expropia a los admins de su dinero (No les deja usar dinero)(en lugar de block, usamos table-row para mostrarlo porque es un elemento del tipo tabla)
-$admin_sin_dinero= $es_admin ? 'display: none;' : 'display: table-row;' ;
+$admin_dinero_class = $es_admin ? 'admin-sin-dinero' : '';
 
 // Obtener el ID del usuario logueado
 $user_id = $_SESSION['user_id'];
@@ -124,7 +128,7 @@ try{
     <script src="../js/validarDatos.js"></script> 
 </head>
 <body>
-    <header style="<?php echo $admin_color; ?>">
+    <header class="<?php echo $admin_color_class; ?>">
         <h1>FORO COMPRAMOS TU COCHE <?php echo $admin_title; ?></h1>
         <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']); ?></p> 
         <p>Aquí se pueden cambiar los datos personales.</p>      
@@ -174,7 +178,7 @@ try{
                     <td><?= htmlspecialchars($usuario['username']); ?></td>
                     <td><input type="text" name="username" value="<?= htmlspecialchars($usuario['username']); ?>"></td>
                 </tr>
-                <tr style="<?php echo $admin_sin_dinero; ?>">
+                <tr class="<?= $admin_dinero_class; ?>">
                     <th>Dinero disponible:</th>
                     <td><?= htmlspecialchars($usuario['dinero']); ?></td>
                     <td><input type="number" name="dinero" max="99999999.99" step="0.01" value="<?= htmlspecialchars($usuario['dinero']); ?>"></td>

@@ -29,18 +29,16 @@ $csp_policy .= "form-action 'self'; ";
 header("Content-Security-Policy: " . $csp_policy);
 
 // Para PHP 7.2.2, configuramos SameSite manualmente
-if (version_compare(PHP_VERSION, '7.3.0', '<')) {
-    // Se obtiene información de la sesión actual
-    $session_name = session_name();
-    $session_id = session_id();
-    if (!empty($session_id)) {
-        $path = $current_params['path'];
-        $domain = $current_params['domain'];
-        $secure = $current_params['secure'] ? 'Secure;' : '';
-        // SameSite Attribute
-        // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
-        header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
-    }
+// Se obtiene información de la sesión actual
+$session_name = session_name();
+$session_id = session_id();
+if (!empty($session_id)) {
+    $path = $current_params['path'];
+    $domain = $current_params['domain'];
+    $secure = $current_params['secure'] ? 'Secure;' : '';
+    // SameSite Attribute
+    // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
+    header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
 }
 
 // Conexión a la base de datos

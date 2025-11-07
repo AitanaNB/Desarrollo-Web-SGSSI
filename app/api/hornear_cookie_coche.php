@@ -2,7 +2,18 @@
 //lore ipsum
 session_start();
 header('Content-Type: application/json');
-
+// Para PHP 7.2.2, configuramos SameSite manualmente
+// Se obtiene información de la sesión actual
+$session_name = session_name();
+$session_id = session_id();
+if (!empty($session_id)) {
+    $path = $current_params['path'];
+    $domain = $current_params['domain'];
+    $secure = $current_params['secure'] ? 'Secure;' : '';
+    // SameSite Attribute
+    // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
+    header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
+}
 //No podemos permitir a un usuario entrar en los hornos
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../index.php");

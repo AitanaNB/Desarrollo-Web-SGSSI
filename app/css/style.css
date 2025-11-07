@@ -284,3 +284,55 @@ footer {
 	line-height: 1.4;     
 }
 
+/* --- Nuevas Clases para Eliminar Estilos Inline --- */
+
+/* Estilo para los botones de mensajes de error (usados en login.php y register.php) */
+.btn-link-primary {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    /* !important to override the existing .boton style for the specific button color */
+    background-color: #007bff;
+}
+
+/* Clases para el color del encabezado dinámico de admin/usuario */
+.admin-header {
+    background-color: #c71435; /* Rojo para Admin */
+}
+.user-header {
+    background-color: #007bff; /* Azul para Usuario */
+}
+
+/* Clase para ocultar la fila de "Dinero" para administradores */
+.admin-sin-dinero {
+    display: none;
+}
+
+/* Clase para el botón "Subir mi primer coche" en mis_coches.php */
+.no-coches-container .btn-subir {
+    /* Anula la propiedad de posicionamiento absoluta del estilo .btn-subir para que acepte margin */
+    position: static; 
+    margin-top: 15px;
+    margin-bottom: 0px; /* Ya que .boton tiene 15px */
+    display: inline-block; /* Asegura que el margin se aplique correctamente */
+}
+
+/* Los botones en inicio.php también tienen estilos inline que deben eliminarse, 
+   pero como usan la clase 'boton', podemos usar un estilo general o aplicar las clases de color: */
+.boton.admin-header {
+    background-color: #c71435;
+}
+.boton.user-header {
+    background-color: #007bff;
+}
+
+/* Estilo para Morshu */
+.morshu-image {
+    width: 150px;
+    height: auto;
+    float: right;
+    margin: 20px auto 5px auto;
+}

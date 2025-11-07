@@ -8,27 +8,22 @@ ini_set('session.use_only_cookies', 1);
 session_start();
 
 // Para PHP 7.2.2, configuramos SameSite manualmente
-if (version_compare(PHP_VERSION, '7.3.0', '<')) {
-    // Se obtiene información de la sesión actual
-    $session_name = session_name();
-    $session_id = session_id();
-    if (!empty($session_id)) {
-        $path = $current_params['path'];
-        $domain = $current_params['domain'];
-        $secure = $current_params['secure'] ? 'Secure;' : '';
-        // SameSite Attribute
-        // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
-        header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
-    }
+// Se obtiene información de la sesión actual
+$session_name = session_name();
+$session_id = session_id();
+if (!empty($session_id)) {
+    $path = $current_params['path'];
+    $domain = $current_params['domain'];
+    $secure = $current_params['secure'] ? 'Secure;' : '';
+    // SameSite Attribute
+    // Aquí enviamos todos los atributos explícitamente en una sola cabecera segura.
+    header("Set-Cookie: {$session_name}={$session_id}; Path={$path}; {$secure}HttpOnly; SameSite=Lax", true); 
 }
 
 // Content-Security-Policy (CSP)
-/* Nota: Se requiere 'unsafe-inline' y 'unsafe-eval' para que el código actual funcione
-debido al uso de JavaScript/CSS en línea y jQuery. Para una solución completa, 
-se debe migrar el código en línea a archivos externos o usar Nonces/Hashes. */
 $csp_policy = "default-src 'self'; ";
-$csp_policy .= "script-src 'self' 'unsafe-inline'; "; 
-$csp_policy .= "style-src 'self' 'unsafe-inline'; ";
+$csp_policy .= "script-src 'self'; "; 
+$csp_policy .= "style-src 'self'; ";
 $csp_policy .= "img-src 'self' data:; "; 
 $csp_policy .= "frame-ancestors 'none';"; // Alternativa al X-Frame-Options
 
@@ -130,7 +125,7 @@ include 'bdcon.php';
 				echo "<div class='no-coches'>
                     <h3>No tienes coches registrados</h3>
                     <p>¡Comienza a vender tu primer coche!</p>
-                    <a href='subir_coche.php' class='btn-subir' style='margin-top: 15px;'>
+                    <a href='subir_coche.php' class='btn-subir'>
                         Subir mi primer coche
                     </a>
                   </div>";
