@@ -78,8 +78,8 @@ include 'bdcon.php';
 <div id="popup-confirmacion">
 	<h2  id="texto-confirmacion" >¿Estás seguro de que quieres eliminar el coche?</h2>
 	<p>Esta acción no se puede deshacer.</p>
-	<button class="boton-popup" id="boton-confirmar-eliminacion" onclick="document.getElementById('popup-confirmacion').style.display='none'">Si</button>
-	<button class="boton-popup" onclick="document.getElementById('popup-confirmacion').style.display='none'">No</button>
+	<button class="boton-popup" id="boton-confirmar-eliminacion" >Si</button>
+	<button class="boton-popup" id="boton-remordimientos">No</button>
 </div>
 	
 <body>

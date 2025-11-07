@@ -22,6 +22,7 @@ $(document).ready(function () {
 	//funcion2:ONCLICK BOTON DEL POPUP QUE CONFIRMA ELIMINAR
 	$('#boton-confirmar-eliminacion').on('click', function () {
 		//si se clica en confirmar-eliminacion, suponemos que ya tenemos un valor en idSleccionado del paso anterior, pero aun así revisamos que el valor sea valido por se acaso 
+		document.getElementById('popup-confirmacion').style.display = 'none';
 		if (idSeleccionado == null) {
           console.error('No hay coche seleccionado para eliminar.');
           return;
@@ -75,7 +76,15 @@ $(document).ready(function () {
 			})
 	});
 	//-----------------------------------------------------------------------------
- 
+	
+	//funcion4:-----------------------------------------------------------------------------	
+	//ONCLICK NO ELIMINAR (usuario exibe remordimientos de matar al coche)
+	$('#boton-remordimientos').on('click', function () {
+		//apaga la el popup 
+		document.getElementById('popup-confirmacion').style.display = 'none';
+	});
+	//-----------------------------------------------------------------------------
+	
 	//Ejecucion de la pagina
 	//(Aqui no hay nada porque no hay nada que se ejecute nada más lanzar la página, sino que esperamos siempre a clicks)
 
