@@ -61,7 +61,7 @@ include 'bdcon.php';
     <h2>¡Felicidades por su nueva adquisición exitosa, <?php echo htmlspecialchars($_SESSION['usuario']); ?>!</h2>
 	<p>Nos honra que haya decidido usar nuestro mercado de coches abierto a los usuarios</p>
 	<p>esperamos disfrute de su nuevo vehiculo y que vuelva a comprar con nosotros pronto.</p>
-    <button class="boton-popup" id="ver-inventario">Ver mi inventario</button>
+    <button class="boton-popup" id="ver-mi-inventario" >Ver mi inventario</button>
     <button class="boton-popup" id="seguir-comprando">Seguir comprando</button>
 </div>
 <!-- popup pobre -->
@@ -69,10 +69,11 @@ include 'bdcon.php';
     <h2>No tienes suficiente dinero para comprar este coche</h2>
     <p><?php echo htmlspecialchars($_SESSION['usuario']); ?>, vuélvelo a intentar cuando seas un poco más... rico.</p>
     <img src="../media/Morshu.png" style="width:150px; height:auto; float:right; margin-top:-80px;"/>
-    <button class="boton-popup" id="cerrar-fallo">Oh :,c</button>
+    <button class="boton-popup" id="oh">Oh :,c</button>
 </div>
 
-<body>
+<!--Metemos el atributo del body para luego leerlo en el script desde js-->
+<body data-usuario="<?php echo htmlspecialchars($_SESSION['usuario']); ?>">
 <!-- subtitulo -->
 <header>
         <div class="header-container">
@@ -142,7 +143,9 @@ include 'bdcon.php';
     <a href="https://github.com/AitanaNB/Desarrollo-Web-SGSSI">Nuestro maravilloso y organizado código está disponible en Github</a>
 </footer>
 
-<!-- Scripts -->
+<!-- Llamadas a los Scripts -->
+<!-- El primer script es solo para cargar la libreía de Jquerys, el segundo es nuestro código de catálogo. Ponemos los scripts en una hoja de js aparte para que el codio sea más limpio y más seguro -->
+<!-- Por cierto, esto son llamadas a scripts, con lo que no llvan código, le estamos diciendo que en ese path esta el codigo que tiene que leer, si se pone algo más entre los <script> no se leera -->
 <script src="../js/jquery-3.5.1.min.js"></script>
 <script src="../js/catalogo.js"></script>
 
