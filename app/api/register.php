@@ -51,10 +51,12 @@ $errorExisteDNI = "<!DOCTYPE html>
 							<link rel='stylesheet' href='/css/style.css'>
 						</head>
 						<body class='body-errorConAURA'>
+							<div>
 							<h3>Error en el registro</h3></h3>
 							<p>El DNI <strong>$dni</strong> ya está registrado en el sistema.</p>
 							<p>Por favor, verifica tus datos o utiliza un DNI diferente.</p>
 							<a href='../index.php'  class='boton-errorConAURA'>Volver al registro</a>
+							</div>
 						</body>
 		</html>";
 $errorExisteUsuario = "<!DOCTYPE html>
@@ -65,10 +67,12 @@ $errorExisteUsuario = "<!DOCTYPE html>
 							<link rel='stylesheet' href='/css/style.css'>
 						</head>
 						<body class='body-errorConAURA'>
+							<div>
 							<h3>Error en el registro</h3></h3>
 							<p>El nombre de usuario <strong>$username</strong> ya está registrado en el sistema.</p>
 							<p>Por favor, elige un nombre de usuario diferente.</p>
 							<a href='../index.php'  class='boton-errorConAURA'>Volver al registro</a>
+							</div>
 						</body>
 		</html>";
 $errorHash = "<!DOCTYPE html>
@@ -79,10 +83,12 @@ $errorHash = "<!DOCTYPE html>
 							<link rel='stylesheet' href='/css/style.css'>
 						</head>
 						<body class='body-errorConAURA'>
+							<div>
 							<h3>Error en el registro</h3></h3>
 							<p>Lo sentimos usuario, no hemos conseguido generar bien el hash de su contraseña.</p>
 							<p>Por favor, pruebe más tarde con otra.</p>
 							<a href='../index.php'  class='boton-errorConAURA'>Volver al registro</a>
+							</div>
 						</body>
 		</html>";
 //try,catch por si no va la conexion

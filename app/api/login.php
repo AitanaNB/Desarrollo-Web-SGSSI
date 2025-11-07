@@ -48,12 +48,15 @@ $error_generico = "<!DOCTYPE html>
 							<link rel='stylesheet' href='/css/style.css'>
 						</head>
 						<body class='body-errorConAURA'>
+							<div>
 							<h3>Error al iniciar sesión</h3>
 							<p>Usuario o contraseña incorrectos.</p>
 							<a href='../index.php'  class='boton-errorConAURA'>Volver al inicio</a>
+							</div>
 						</body>
 						</html>";
-						/*"<h3>Error al iniciar sesión</h3>
+						/*"error de reserva le da aura
+						<h3>Error al iniciar sesión</h3>
 								<p>Usuario o contraseña incorrectos.</p>
 								<a href='../index.php'  <link rel='stylesheet' href='/css/style.css'>'>Volver al inicio</a>
 								</div>";
